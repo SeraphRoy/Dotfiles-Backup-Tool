@@ -15,6 +15,7 @@ if [ ! -f $dotfilesrc ]; then
    echo "   '*.swp']" >> $dotfilesrc
 fi
 
+sudo pip install --upgrade dotfiles
 for entry in $dotfilesrc $vimrc $tmuxconf $screenrc $zshrc; do
    dotfiles -a $entry
 done
