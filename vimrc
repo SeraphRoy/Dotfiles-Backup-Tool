@@ -56,7 +56,8 @@ Plugin 'easymotion/vim-easymotion'
 " Plugin 'wincent/command-t'
 " Plugin 'vim-auto-save'
 " Plugin 'taglist.vim'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'greymd/oscyank.vim'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -160,7 +161,7 @@ set tags=tags,~/.tags/tags,~/cvp/tags
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
 
-set clipboard=unnamed
+" set clipboard=unnamed
 
 " persistent undo history
 silent !mkdir /tmp/.vim_backup > /dev/null 2>&1
@@ -198,6 +199,9 @@ nmap :nt :NERDTree
 
 " shortcut for TagbarToggle
 nmap :tt :TagbarToggle
+
+" shortcut for Undotree
+nmap :undo :UndotreeToggle<CR>:UndotreeFocus<CR>
 
 " turn off trailing whitespace detection
 autocmd VimEnter * AirlineToggleWhitespace
@@ -252,6 +256,9 @@ let g:tagbar_indent = 0
 
 " vim-go
 let g:go_version_warning = 0
+
+" copy to clipboard no matter where you are
+noremap <leader>y :Oscyank<cr>
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------

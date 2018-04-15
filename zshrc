@@ -65,14 +65,52 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 tmuxr="tmux ls | grep -vq attached && tmux a || tmux new" # same effect as 'screen -R'
-alias sshus="mosh us165 -- sh -c \"$tmuxr\""
-alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
-alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
+
+smux() {
+#   if [ "X$1" = "X" ]; then
+   if [ $# -eq 0 ]; then
+
+      echo "usage: `basename $0` <host> <port>"
+      return 1
+   fi
+
+   port=22
+   if [ -z "$2" ]; then
+      port=22
+   else
+      port=$2
+   fi
+
+   if [ "X$SSH_AUTH_SOCK" = "X" ]; then
+      eval `ssh-agent -s`
+      ssh-add $HOME/.ssh/id_rsa
+   fi
+
+   AUTOSSH_POLL=20 AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null) autossh -p $port -t $1 "$tmuxr"
+   #AUTOSSH_GATETIME=30
+   #AUTOSSH_LOGFILE=$HOST.log
+   #AUTOSSH_DEBUG=yes
+   #AUTOSSH_PATH=/usr/local/bin/ssh
+   # export AUTOSSH_POLL AUTOSSH_LOGFILE AUTOSSH_DEBUG AUTOSSH_PATH AUTOSSH_GATETIME AUTOSSH_PORT
+
+   # -t is the ssh option to force a pseudo terminal (pty)
+   # autossh -t $@ "tmux attach-session"
+}
+
+#alias sshus="mosh us165 -- sh -c \"$tmuxr\""
+#alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
+#alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
+#alias sshrecruit="ssh yanxichen@recruit.arista.com"
+
+alias sshus="smux us165"
+alias sshcvp="smux us165 10140"
+alias sshr123s19="smux r123s19 10140"
 alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 export VISUAL=vim
 export EDITOR=vim
 alias grep='grep -n --color=always'
+alias vi='vim'
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH="/home/yanxichen/go"
 
@@ -129,4 +167,3 @@ esac
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
