@@ -56,8 +56,9 @@ Plugin 'easymotion/vim-easymotion'
 " Plugin 'wincent/command-t'
 " Plugin 'vim-auto-save'
 " Plugin 'taglist.vim'
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 Plugin 'greymd/oscyank.vim'
+Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
