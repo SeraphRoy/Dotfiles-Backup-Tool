@@ -24,41 +24,30 @@ Plugin 'fatih/vim-go'
 Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-latex/vim-latex'
-" Plugin 'fatih/vim-go'
 Plugin 'rust-lang/rust.vim'
 Plugin 'scrooloose/syntastic'
-" Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'yggdroot/indentline'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
 Plugin 'terryma/vim-multiple-cursors'
-" Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'luochen1990/rainbow'
-" Plugin 'lervag/vimtex'
 Plugin 'mbbill/undotree'
 Plugin 'bling/vim-airline'
 Plugin 'flazz/vim-colorschemes'
-" Plugin 'jiangmiao/auto-pairs'
 Plugin 'raimondi/delimitmate'
 Plugin 'xuhdev/vim-latex-live-preview'
-Plugin 'L9' 
-" Plugin 'myusuf3/numbers.vim'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'oplatek/conque-shell'
 Plugin 'mileszs/ack.vim'
-" Plugin 'ervandew/supertab'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'a.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'easymotion/vim-easymotion'
-" Plugin 'bronson/vim-trailing-whitespace'
-" Plugin 'wincent/command-t'
-" Plugin 'vim-auto-save'
-" Plugin 'taglist.vim'
-" Plugin 'Valloric/YouCompleteMe'
+if has('patch1578')
+   Plugin 'Valloric/YouCompleteMe'
+endif
 Plugin 'greymd/oscyank.vim'
-Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -172,6 +161,22 @@ set undodir=/tmp/.vim_backup
 " make // to search visual hightlighted content
 vnoremap // y/<C-R>"<CR>"
 
+" resotre cursor position
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
+" Auto-toggle paste mode for xterm
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -260,6 +265,11 @@ let g:go_version_warning = 0
 
 " copy to clipboard no matter where you are
 noremap <leader>y :Oscyank<cr>
+nmap yy yy:OscyankRegister<cr>
+nmap dd dd:OscyankRegister<cr>
+vmap y y:OscyankRegister<cr>
+vmap d d:OscyankRegister<cr>
+
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------
