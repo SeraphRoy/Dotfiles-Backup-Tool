@@ -64,7 +64,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-tmuxr="tmux ls | grep -vq attached && tmux a || tmux new" # same effect as 'screen -R'
+# same effect as 'screen -R'
+# tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
+# tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
 
 smux() {
 #   if [ "X$1" = "X" ]; then
@@ -86,7 +88,7 @@ smux() {
       ssh-add $HOME/.ssh/id_rsa
    fi
 
-   AUTOSSH_POLL=20 AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null) autossh -p $port -t $1 "$tmuxr"
+   AUTOSSH_POLL=20 AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null) autossh -p $port -t $1 "tmux -CC -u attach"
    #AUTOSSH_GATETIME=30
    #AUTOSSH_LOGFILE=$HOST.log
    #AUTOSSH_DEBUG=yes
@@ -111,7 +113,12 @@ export VISUAL=vim
 export EDITOR=vim
 alias grep='grep -n --color=always'
 alias vi='vim'
+# if [ -f ~/vim ]; then
+#    alias vi='~/vim'
+# fi
 export PATH=$PATH:/usr/local/go/bin
+export PATH=/usr/local/bin:$PATH
+export PATH=~/bin:$PATH
 export GOPATH="/home/yanxichen/go"
 
 export SHELL="/bin/zsh"

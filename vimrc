@@ -21,6 +21,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'fatih/vim-go'
+Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-latex/vim-latex'
@@ -30,6 +31,7 @@ Plugin 'yggdroot/indentline'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
 Plugin 'terryma/vim-multiple-cursors'
+Plugin 'sickill/vim-pasta'
 Plugin 'luochen1990/rainbow'
 Plugin 'mbbill/undotree'
 Plugin 'bling/vim-airline'
@@ -38,16 +40,18 @@ Plugin 'raimondi/delimitmate'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'oplatek/conque-shell'
-Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'a.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'bkad/camelcasemotion'
+Plugin 'terryma/vim-expand-region'
 if has('patch1578')
    Plugin 'Valloric/YouCompleteMe'
 endif
 Plugin 'greymd/oscyank.vim'
+Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -111,6 +115,8 @@ set tw=0
 " maps : to ;
 map ; :
 
+set encoding=utf-8
+
 " make .vimrc has effect immediately
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
@@ -119,7 +125,7 @@ nmap oo o<Esc>k
 nmap OO O<Esc>
 
 "map esc to jj
-:imap jj <Esc>
+imap jj <Esc>
 
 " set to auto read when a file is changed from the outside
 set autoread
@@ -141,9 +147,9 @@ autocmd FileType python :set expandtab tabstop=3 shiftwidth=3
 " backspace
 set backspace=indent,eol,start
 
-" page up/down for side window
-noremap <Leader>e <C-w>p<C-u><C-w>p
-noremap <Leader>d <C-w>p<C-d><C-w>p
+" " page up/down for side window
+" noremap <Leader>e <C-w>p<C-u><C-w>p
+" noremap <Leader>d <C-w>p<C-d><C-w>p
 
 " ctags file
 set tags=tags,~/.tags/tags,~/cvp/tags
@@ -158,24 +164,24 @@ silent !mkdir /tmp/.vim_backup > /dev/null 2>&1
 set undofile
 set undodir=/tmp/.vim_backup
 
-" make // to search visual hightlighted content
-vnoremap // y/<C-R>"<CR>"
+" " make // to search visual hightlighted content
+" vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
 
-" resotre cursor position
+" restore cursor position
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
 
-" Auto-toggle paste mode for xterm
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-function! XTermPasteBegin()
-  set pastetoggle=<Esc>[201~
-  set paste
-  return ""
-endfunction
+" " toggle paste mode automatically when paste
+" let &t_SI .= "\<Esc>[?2004h"
+" let &t_EI .= "\<Esc>[?2004l"
+" inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+" function! XTermPasteBegin()
+"   set pastetoggle=<Esc>[201~
+"   set paste
+"   return ""
+" endfunction
 
 "       ------------end of general vim settings-------------
 
@@ -218,9 +224,6 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
-
-" auto-pairs settings
-let g:AutoPairsMapSpace = 0
 
 " vim-latex-live-preview settings
 let g:livepreview_previewer = 'open -a Preview'
@@ -269,6 +272,9 @@ nmap yy yy:OscyankRegister<cr>
 nmap dd dd:OscyankRegister<cr>
 vmap y y:OscyankRegister<cr>
 vmap d d:OscyankRegister<cr>
+
+" camelcasemotion
+call camelcasemotion#CreateMotionMappings('<leader>')
 
 "       -------------end of plugin vim settings--------------
 
