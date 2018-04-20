@@ -279,11 +279,11 @@ vmap d d:OscyankRegister<cr>
 call camelcasemotion#CreateMotionMappings('<leader>')
 
 " gitgutter
-nmap :ph <Plug>GitGutterPrevHunk
-nmap :nh <Plug>GitGutterNextHunk
-nmap :hp <Plug>GitGutterPreviewHunk
-nmap :hs <Plug>GitGutterStageHunk
-nmap :hu <Plug>GitGutterUndoHunk
+nmap - <Plug>GitGutterPrevHunk
+nmap = <Plug>GitGutterNextHunk
+nmap :ph <Plug>GitGutterPreviewHunk
+nmap :sh <Plug>GitGutterStageHunk
+nmap :uh <Plug>GitGutterUndoHunk
 
 "       -------------end of plugin vim settings--------------
 
