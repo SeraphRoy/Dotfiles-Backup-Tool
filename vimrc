@@ -20,7 +20,7 @@ call vundle#begin()
 " " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'fatih/vim-go'
+
 Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
@@ -40,6 +40,7 @@ Plugin 'raimondi/delimitmate'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'oplatek/conque-shell'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'a.vim'
@@ -51,7 +52,8 @@ if has('patch1578')
    Plugin 'Valloric/YouCompleteMe'
 endif
 Plugin 'greymd/oscyank.vim'
-Plugin 'roxma/vim-paste-easy'
+" Plugin 'mhinz/vim-signify'
+" Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -275,6 +277,13 @@ vmap d d:OscyankRegister<cr>
 
 " camelcasemotion
 call camelcasemotion#CreateMotionMappings('<leader>')
+
+" gitgutter
+nmap :ph <Plug>GitGutterPrevHunk
+nmap :nh <Plug>GitGutterNextHunk
+nmap :hp <Plug>GitGutterPreviewHunk
+nmap :hs <Plug>GitGutterStageHunk
+nmap :hu <Plug>GitGutterUndoHunk
 
 "       -------------end of plugin vim settings--------------
 
