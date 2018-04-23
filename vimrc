@@ -40,7 +40,8 @@ Plugin 'raimondi/delimitmate'
 Plugin 'xuhdev/vim-latex-live-preview'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'oplatek/conque-shell'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'wellle/targets.vim'
+" Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'a.vim'
@@ -52,7 +53,7 @@ if has('patch1578')
    Plugin 'Valloric/YouCompleteMe'
 endif
 Plugin 'greymd/oscyank.vim'
-" Plugin 'mhinz/vim-signify'
+Plugin 'mhinz/vim-signify'
 " Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -284,7 +285,15 @@ nmap = <Plug>GitGutterNextHunk
 nmap :ph <Plug>GitGutterPreviewHunk
 nmap :sh <Plug>GitGutterStageHunk
 nmap :uh <Plug>GitGutterUndoHunk
+set updatetime=300
 
+" vim-signify
+nmap - <plug>(signify-prev-hunk)
+nmap = <plug>(signify-next-hunk)
+let g:signify_vcs_cmds = {
+  \ 'git':      'git diff --no-color --no-ext-diff -U0 -- %f',
+  \ 'perforce': 'a4 info '. sy#util#shell_redirect('%n') .' && env P4DIFF=%d a4 diff -du 0 %f'
+  \ }
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------

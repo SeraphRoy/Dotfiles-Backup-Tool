@@ -5,6 +5,7 @@ vimrc=~/.vimrc
 tmuxconf=/.tmux.conf
 screenrc=~/.screenrc
 zshrc=~/.zshrc
+gitconfig=~/.gitconfig
 
 if [ ! -f $dotfilesrc ]; then
    echo "[dotfiles]" >> $dotfilesrc
@@ -16,6 +17,6 @@ if [ ! -f $dotfilesrc ]; then
 fi
 
 sudo pip install --upgrade dotfiles
-for entry in $dotfilesrc $vimrc $tmuxconf $screenrc $zshrc; do
+for entry in $gitconfig $dotfilesrc $vimrc $tmuxconf $screenrc $zshrc; do
    dotfiles -a $entry
 done
