@@ -7,57 +7,56 @@ if filereadable( $VIM . "/vimfiles/arista.vim" )
   source $VIM/vimfiles/arista.vim
 endif
 
-" Put your own customizations below"
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" " alternatively, pass a path where Vundle should install plugins
-" "call vundle#begin('~/some/path/here')
-"
-" " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'octol/vim-cpp-enhanced-highlight'
-
-Plugin 'nelstrom/vim-visual-star-search'
-Plugin 'majutsushi/tagbar'
-Plugin 'kien/ctrlp.vim'
-Plugin 'vim-latex/vim-latex'
-Plugin 'rust-lang/rust.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'yggdroot/indentline'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'godlygeek/tabular'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'sickill/vim-pasta'
-Plugin 'luochen1990/rainbow'
-Plugin 'mbbill/undotree'
-Plugin 'bling/vim-airline'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'raimondi/delimitmate'
-Plugin 'xuhdev/vim-latex-live-preview'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'oplatek/conque-shell'
-Plugin 'wellle/targets.vim'
-" Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'a.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'bkad/camelcasemotion'
-Plugin 'terryma/vim-expand-region'
-if has('patch1578')
-   Plugin 'Valloric/YouCompleteMe'
+" download vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
-Plugin 'greymd/oscyank.vim'
-Plugin 'mhinz/vim-signify'
+
+" vim-plug begin
+call plug#begin('~/.vim/bundle')
+
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'nelstrom/vim-visual-star-search'
+Plug 'vim-latex/vim-latex'
+Plug 'rust-lang/rust.vim'
+" Plug 'w0rp/ale'
+Plug 'yggdroot/indentline'
+Plug 'altercation/vim-colors-solarized'
+Plug 'Yggdroot/LeaderF'
+Plug 'godlygeek/tabular'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'sickill/vim-pasta'
+Plug 'luochen1990/rainbow'
+Plug 'mbbill/undotree'
+Plug 'bling/vim-airline'
+Plug 'flazz/vim-colorschemes'
+Plug 'raimondi/delimitmate'
+Plug 'xuhdev/vim-latex-live-preview'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'oplatek/conque-shell'
+Plug 'fatih/vim-go'
+Plug 'wellle/targets.vim'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'jiangmiao/auto-pairs'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'ConradIrwin/vim-bracketed-paste'
+Plug 'easymotion/vim-easymotion'
+Plug 'bkad/camelcasemotion'
+Plug 'terryma/vim-expand-region'
+Plug 'neomake/neomake'
+if has('patch1578')
+   Plug 'Valloric/YouCompleteMe'
+endif
+Plug 'greymd/oscyank.vim'
+Plug 'mhinz/vim-signify'
+" Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
 " " To ignore plugin indent changes, instead use:
 " "filetype plugin on
 " "
@@ -155,7 +154,7 @@ set backspace=indent,eol,start
 " noremap <Leader>d <C-w>p<C-d><C-w>p
 
 " ctags file
-set tags=tags,~/.tags/tags,~/cvp/tags
+set tags=./.tags;,.tags
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
@@ -186,15 +185,95 @@ endif
 "   return ""
 " endfunction
 
+" Configure ALT key for vim
+function! Terminal_MetaMode(mode)
+    set ttimeout
+    if $TMUX != ''
+        set ttimeoutlen=30
+    elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
+        set ttimeoutlen=80
+    endif
+    if has('nvim') || has('gui_running')
+        return
+    endif
+    function! s:metacode(mode, key)
+        if a:mode == 0
+            exec "set <M-".a:key.">=\e".a:key
+        else
+            exec "set <M-".a:key.">=\e]{0}".a:key."~"
+        endif
+    endfunc
+    for i in range(10)
+        call s:metacode(a:mode, nr2char(char2nr('0') + i))
+    endfor
+    for i in range(26)
+        call s:metacode(a:mode, nr2char(char2nr('a') + i))
+        call s:metacode(a:mode, nr2char(char2nr('A') + i))
+    endfor
+    if a:mode != 0
+        for c in [',', '.', '/', ';', '[', ']', '{', '}']
+            call s:metacode(a:mode, c)
+        endfor
+        for c in ['?', ':', '-', '_']
+            call s:metacode(a:mode, c)
+        endfor
+    else
+        for c in [',', '.', '/', ';', '{', '}']
+            call s:metacode(a:mode, c)
+        endfor
+        for c in ['?', ':', '-', '_']
+            call s:metacode(a:mode, c)
+        endfor
+    endif
+endfunc
+
+call Terminal_MetaMode(0) 
+
+" make < and > not cancel visual selection
+xnoremap <  <gv
+xnoremap >  >gv
+
+" hightlight current line only in normal mode
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
+
+" map CTRL_HJKL to move cursor in all mode
+noremap <C-h> <left>
+noremap <C-j> <down>
+noremap <C-k> <up>
+noremap <C-l> <right>
+inoremap <C-h> <left>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <right>
+
+" insert mode as emacs
+inoremap <c-a> <home>
+inoremap <c-e> <end>
+inoremap <c-d> <del>
+
+
+" faster command mode
+cnoremap <c-h> <left>
+cnoremap <c-j> <down>
+cnoremap <c-n> <down>
+cnoremap <c-k> <up>
+cnoremap <c-p> <up>
+cnoremap <c-l> <right>
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+cnoremap <c-d> <del>
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
 
-" ctrlp settings
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|pyc)$'
+" LeaderF settings
+let g:Lf_ShortcutF = '<C-P>'
+let g:Lf_WindowHeight = 0.13
+let g:Lf_ShowRelativePath = 0
+let g:Lf_HideHelp = 1
+nmap <M-p> :LeaderfFunction!<CR>
 
 " vim-airline theme
 let g:airline_theme="wombat"
@@ -203,17 +282,18 @@ let g:airline_theme="wombat"
 let g:ycm_complete_in_comments=1
 set completeopt-=preview
 let g:enable_numbers = 0
+let g:ycm_semantic_triggers =  {
+			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+			\ 'cs,lua,javascript': ['re!\w{2}'],
+			\ }
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
 
 " ConqueTerm settings
 let g:ConqueTerm_CWInsert = 1
 let g:ConqueTerm_InsertOnEnter = 1
 nmap :cv :ConqueTermVSplit bash
-
-" shortcut for NERDTree
-nmap :nt :NERDTree
-
-" shortcut for TagbarToggle
-nmap :tt :TagbarToggle
 
 " shortcut for Undotree
 nmap :undo :UndotreeToggle<CR>:UndotreeFocus<CR>
@@ -245,12 +325,6 @@ let g:rainbow_active = 1
 " au Syntax * RainbowParenthesesLoadSquare
 " au Syntax * RainbowParenthesesLoadBraces
 
-" Syntastic
-let g:syntastic_mode_map = {
-            \ "mode": "passive",
-	\ "active_filetypes": [],
-	\ "passive_filetypes": [] }
-	"
 " indent-guides
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=236
@@ -262,10 +336,6 @@ let g:indent_guides_soft_pattern = ' '
 "delimitMate
 let delimitMate_balance_matchpairs = 1
 
-" tagbar
-let g:tagbar_width = 17
-let g:tagbar_indent = 0
-
 " vim-go
 let g:go_version_warning = 0
 
@@ -276,16 +346,15 @@ nmap dd dd:OscyankRegister<cr>
 vmap y y:OscyankRegister<cr>
 vmap d d:OscyankRegister<cr>
 
+" copy to clipboard no matter where you are
+" nnoremap <leader>y :call system('nc localhost 9999', @0)<CR>
+" nmap yy yy<leader>y
+" nmap dd dd<leader>y
+" vmap y y<leader>y
+" vmap d d<leader>y
+
 " camelcasemotion
 call camelcasemotion#CreateMotionMappings('<leader>')
-
-" gitgutter
-nmap - <Plug>GitGutterPrevHunk
-nmap = <Plug>GitGutterNextHunk
-nmap :ph <Plug>GitGutterPreviewHunk
-nmap :sh <Plug>GitGutterStageHunk
-nmap :uh <Plug>GitGutterUndoHunk
-set updatetime=300
 
 " vim-signify
 nmap - <plug>(signify-prev-hunk)
@@ -294,6 +363,57 @@ let g:signify_vcs_cmds = {
   \ 'git':      'git diff --no-color --no-ext-diff -U0 -- %f',
   \ 'perforce': 'a4 info '. sy#util#shell_redirect('%n') .' && env P4DIFF=%d a4 diff -du 0 %f'
   \ }
+nmap :diff :SignifyDiff
+
+" vim-gutentags
+" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+" 配置 ctags 的参数
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+" 检测 ~/.cache/tags 不存在就新建
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+
+" asyncrun.vim
+let g:asyncrun_status = ''
+let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+let g:asyncrun_open = 6
+let g:asyncrun_bell = 1
+function! s:RunMe()
+   if &filetype == "vim"
+      exec 'source %'
+   elseif &filetype == "python"
+      exec 'AsyncRun python %'
+   elseif &filetype == "go"
+      exec 'AsyncRun go run %'
+   endif
+endfunc
+function! s:TestMe()
+   if &filetype == "vim"
+      exec 'source %'
+   elseif &filetype == "python"
+      exec 'AsyncRun python %'
+   elseif &filetype == "go"
+      exec 'AsyncRun go test %'
+   endif
+endfunc
+command! VimRun call s:RunMe()
+command! VimTest call s:TestMe()
+nmap <M-r> :VimRun<cr>
+nmap <M-t> :VimTest<cr>
+
+" Neomake
+call neomake#configure#automake('nrwi')
+let g:neomake_open_list = 2
+
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------
