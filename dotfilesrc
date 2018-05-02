@@ -1,5 +1,6 @@
 [dotfiles]
 repository = ~/Dropbox/Dotfiles
+packages = ['ssh']
 ignore = [
    '.git',
    '.gitignore',
