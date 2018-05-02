@@ -99,10 +99,10 @@ smux() {
    # autossh -t $@ "tmux attach-session"
 }
 
-#alias sshus="mosh us165 -- sh -c \"$tmuxr\""
-#alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
-#alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
-#alias sshrecruit="ssh yanxichen@recruit.arista.com"
+# alias sshus="mosh us165 -- sh -c \"tmux attach\""
+# alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
+# alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
+# alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 alias sshus="smux us165"
 alias sshcvp="smux us165 10140"
@@ -113,13 +113,14 @@ export VISUAL=vim
 export EDITOR=vim
 alias grep='grep -n --color=always'
 alias vi='vim'
+alias findp="ps aux | grep"
 # if [ -f ~/vim ]; then
 #    alias vi='~/vim'
 # fi
 export PATH=$PATH:/usr/local/go/bin
 export PATH=/usr/local/bin:$PATH
 export PATH=~/bin:$PATH
-export GOPATH="/home/yanxichen/go"
+export GOPATH="$HOME/go"
 
 export SHELL="/bin/zsh"
 case "$(uname -s)" in
@@ -127,6 +128,13 @@ case "$(uname -s)" in
    Darwin)
      #echo 'Mac OS X'
      [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+     if test $(pidof clipper | wc -w) -eq 0; then
+        # extra port forwarding for mosh
+        # ssh -N -f us165-clipper > /dev/null 2>&1
+        nohup clipper --port 9999 </dev/null >/dev/null 2>&1 &
+     else
+        ;
+     fi
      ;;
    Linux)
      #echo 'Linux'
@@ -143,6 +151,9 @@ case "$(uname -s)" in
     #echo 'other OS' 
      ;;
 esac
+
+bindkey "^P" history-beginning-search-backward
+bindkey "^N" history-beginning-search-forward
 
 # User configuration
 
