@@ -47,7 +47,7 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
-Plug 'neomake/neomake'
+" Plug 'neomake/neomake'
 if has('patch1578')
    Plug 'Valloric/YouCompleteMe'
 endif
@@ -123,8 +123,8 @@ set encoding=utf-8
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " shortcut for inserting a new line without entering insert mode
-nmap oo o<Esc>k
-nmap OO O<Esc>
+nmap oo :normal o<CR>k
+nmap OO :normal O<CR>
 
 "map esc to jj
 imap jj <Esc>
@@ -191,7 +191,7 @@ function! Terminal_MetaMode(mode)
     if $TMUX != ''
         set ttimeoutlen=30
     elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
-        set ttimeoutlen=80
+        set ttimeoutlen=50
     endif
     if has('nvim') || has('gui_running')
         return
@@ -264,6 +264,9 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 cnoremap <c-d> <del>
 
+" terminal
+nmap :term<CR> :term<CR><C-w>J
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -274,6 +277,9 @@ let g:Lf_WindowHeight = 0.13
 let g:Lf_ShowRelativePath = 0
 let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
+
+" auto pair
+let g:AutoPairsShortcutToggle = ''
 
 " vim-airline theme
 let g:airline_theme="wombat"
@@ -370,6 +376,14 @@ nmap :diff :SignifyDiff
 let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
 " 所生成的数据文件的名称
 let g:gutentags_ctags_tagfile = '.tags'
+" 同时开启 ctags 和 gtags 支持：
+let g:gutentags_modules = []
+if executable('ctags')
+	let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
+endif
 " 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
@@ -377,15 +391,21 @@ let g:gutentags_cache_dir = s:vim_tags
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+" 如果使用 universal ctags 需要增加下面一行
+let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 " 检测 ~/.cache/tags 不存在就新建
 if !isdirectory(s:vim_tags)
    silent! call mkdir(s:vim_tags, 'p')
 endif
+" 禁用 gutentags 自动加载 gtags 数据库的行为
+let g:gutentags_auto_add_gtags_cscope = 0
+let $GTAGSLABEL = 'native-pygments'
+let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " asyncrun.vim
 let g:asyncrun_status = ''
 let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
-let g:asyncrun_open = 6
+let g:asyncrun_open = 8
 let g:asyncrun_bell = 1
 function! s:RunMe()
    if &filetype == "vim"
@@ -409,10 +429,12 @@ command! VimRun call s:RunMe()
 command! VimTest call s:TestMe()
 nmap <M-r> :VimRun<cr>
 nmap <M-t> :VimTest<cr>
+nmap :Run :AsyncRun
+nmap :Stop :AsyncStop
 
 " Neomake
-call neomake#configure#automake('nrwi')
-let g:neomake_open_list = 2
+" call neomake#configure#automake('nrwi')
+" let g:neomake_open_list = 2
 
 "       -------------end of plugin vim settings--------------
 
