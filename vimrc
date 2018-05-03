@@ -342,9 +342,6 @@ let g:indent_guides_soft_pattern = ' '
 "delimitMate
 let delimitMate_balance_matchpairs = 1
 
-" vim-go
-let g:go_version_warning = 0
-
 " copy to clipboard no matter where you are
 noremap <leader>y :Oscyank<cr>
 nmap yy yy:OscyankRegister<cr>
@@ -381,9 +378,9 @@ let g:gutentags_modules = []
 if executable('ctags')
 	let g:gutentags_modules += ['ctags']
 endif
-if executable('gtags-cscope') && executable('gtags')
-	let g:gutentags_modules += ['gtags_cscope']
-endif
+" if executable('gtags-cscope') && executable('gtags')
+" 	let g:gutentags_modules += ['gtags_cscope']
+" endif
 " 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
@@ -397,10 +394,10 @@ let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 if !isdirectory(s:vim_tags)
    silent! call mkdir(s:vim_tags, 'p')
 endif
-" 禁用 gutentags 自动加载 gtags 数据库的行为
-let g:gutentags_auto_add_gtags_cscope = 0
-let $GTAGSLABEL = 'native-pygments'
-let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+"  禁用 gutentags 自动加载 gtags 数据库的行为
+"let g:gutentags_auto_add_gtags_cscope = 0
+"let $GTAGSLABEL = 'native-pygments'
+"let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " asyncrun.vim
 let g:asyncrun_status = ''
