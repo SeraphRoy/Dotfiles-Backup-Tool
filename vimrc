@@ -367,6 +367,16 @@ let g:signify_vcs_cmds = {
   \ 'perforce': 'a4 info '. sy#util#shell_redirect('%n') .' && env P4DIFF=%d a4 diff -du 0 %f'
   \ }
 nmap :diff :SignifyDiff
+let g:signify_vcs_cmds_diffmode = {
+  \ 'git':      'git show HEAD:./%f',
+  \ 'hg':       'hg cat %f',
+  \ 'svn':      'svn cat %f',
+  \ 'bzr':      'bzr cat %f',
+  \ 'darcs':    'darcs show contents -- %f',
+  \ 'cvs':      'cvs up -p -- %f 2>%n',
+  \ 'perforce': 'a4 print %f',
+  \ }
+<
 
 " vim-gutentags
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
