@@ -40,6 +40,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/asyncrun.vim'
+Plug 'altercation/vim-colors-solarized'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
@@ -87,7 +88,10 @@ syntax on
 let &t_Co=256
 
 " color scheme/theme
-colorscheme molokai
+syntax enable
+set background=dark
+colorscheme solarized
+
 
 " line number on
 set number relativenumber
@@ -231,6 +235,7 @@ endfunc
 call Terminal_MetaMode(0) 
 
 " hightlight current line only in normal mode
+set cursorline
 autocmd InsertLeave,WinEnter * set cursorline
 autocmd InsertEnter,WinLeave * set nocursorline
 
