@@ -1,3 +1,5 @@
+# ------------------- necessary installations ------------------------
+
 # Antigen: https://github.com/zsh-users/antigen
 ANTIGEN="$HOME/.antigen.zsh"
 
@@ -26,21 +28,35 @@ if [ ! -f "$ANTIGEN" ]; then
 	mv "$TMPFILE" "$ANTIGEN"
 fi
 
-# antigen plugins
+# install powerline font if not exist
+if ! fc-list | grep powerline > /dev/null; then
+   echo "Installing powerline font ..."
+   dir="fonts"
+   git clone https://github.com/powerline/fonts.git --depth=1 $dir
+   cd $dir
+   ./install.sh
+   cd ..
+   rm -rf $dir
+fi
+
+# ------------------- end of necessary installations ------------------------
+
+
+# ------------------- antigen plugins ------------------------
+
 source "$ANTIGEN"
 antigen use oh-my-zsh
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle git
 antigen bundle autojump
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen theme ys
+antigen theme bhilburn/powerlevel9k powerlevel9k
 antigen apply
 
-# ------------below are my customized configs----------------------
+# ------------------- end of antigen plugins ------------------------
 
-# # same effect as 'screen -R'
-# tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
-# tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
+
+# ------------------ custom functions ----------------------
 
 smux() {
 #   if [ "X$1" = "X" ]; then
@@ -73,6 +89,22 @@ smux() {
    # autossh -t $@ "tmux attach-session"
 }
 
+# ------------------ end of custom functions----------------------
+
+
+# ------------------ plugin settings ----------------------
+
+export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
+# ------------------ end of plugin settings ----------------------
+
+
+# ------------------ general zsh settings ----------------------
+
+# # same effect as 'screen -R'
+# tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
+# tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
+
 # alias sshus="mosh us165 -- sh -c \"tmux attach\""
 # alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
 # alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
@@ -92,7 +124,6 @@ alias findp="ps aux | grep"
 if [ -x "$(command -v Art)"  ]; then
    alias grepcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp"
 fi
-
 # if [ -f ~/vim ]; then
 #    alias vi='~/vim'
 # fi
@@ -134,5 +165,8 @@ esac
 
 bindkey "^P" up-line-or-beginning-search
 bindkey "^N" down-line-or-beginning-search
+export TERM='xterm-256color'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# ------------------ end of general zsh settings ----------------------
