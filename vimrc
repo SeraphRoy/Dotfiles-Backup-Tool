@@ -3,8 +3,8 @@ if filereadable( "/etc/vimrc" )
   source /etc/vimrc
 endif
 " Include Arista-specific settings
-if filereadable( $VIM . "/vimfiles/arista.vim" )
-  source $VIM/vimfiles/arista.vim
+if filereadable( "/usr/share/vim/vimfiles/arista.vim" )
+source /usr/share/vim/vimfiles/arista.vim
 endif
 
 " download vim-plug
@@ -24,7 +24,6 @@ Plug 'rust-lang/rust.vim'
 " Plug 'w0rp/ale'
 Plug 'yggdroot/indentline'
 Plug 'altercation/vim-colors-solarized'
-Plug 'Yggdroot/LeaderF'
 Plug 'godlygeek/tabular'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sickill/vim-pasta'
@@ -36,19 +35,21 @@ Plug 'raimondi/delimitmate'
 Plug 'xuhdev/vim-latex-live-preview'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
-Plug 'fatih/vim-go'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
 " Plug 'neomake/neomake'
 if has('patch1578')
+   Plug 'Yggdroot/LeaderF'
+   Plug 'w0rp/ale'
+   Plug 'ludovicchabant/vim-gutentags'
+   Plug 'fatih/vim-go'
    Plug 'Valloric/YouCompleteMe'
 endif
 Plug 'greymd/oscyank.vim'
@@ -77,7 +78,7 @@ call plug#end()
 "       ------------general vim settings-------------
 
 " <Leader> = ','
-let mapleader=","
+let mapleader=" "
 
 " Syntax Highlight
 syntax on
@@ -228,10 +229,6 @@ function! Terminal_MetaMode(mode)
 endfunc
 
 call Terminal_MetaMode(0) 
-
-" make < and > not cancel visual selection
-xnoremap <  <gv
-xnoremap >  >gv
 
 " hightlight current line only in normal mode
 autocmd InsertLeave,WinEnter * set cursorline
@@ -442,6 +439,12 @@ nmap :Stop :AsyncStop
 " Neomake
 " call neomake#configure#automake('nrwi')
 " let g:neomake_open_list = 2
+
+" ALE
+let g:airline#extensions#ale#enabled = 1
+let g:ale_linters = {
+         \ 'python': ['pylint'],
+\ }
 
 "       -------------end of plugin vim settings--------------
 
