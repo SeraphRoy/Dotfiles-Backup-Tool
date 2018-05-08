@@ -37,10 +37,14 @@ if ! fc-list | grep powerline > /dev/null; then
    ./install.sh
    cd ..
    rm -rf $dir
+   git clone https://github.com/gabrielelana/awesome-terminal-fonts $dir
+   cd $dir
+   ./install.sh
+   cd ..
+   rm -rf $dir
 fi
 
 # ------------------- end of necessary installations ------------------------
-
 
 # ------------------- antigen plugins ------------------------
 
@@ -50,6 +54,9 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle git
 antigen bundle autojump
 antigen bundle zsh-users/zsh-syntax-highlighting
+export TERM='xterm-256color'
+POWERLEVEL9K_MODE='nerdfont-complete'
+# need to install nerd-fonts
 antigen theme bhilburn/powerlevel9k powerlevel9k
 antigen apply
 
@@ -94,8 +101,12 @@ smux() {
 
 # ------------------ plugin settings ----------------------
 
-export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir rbenv vcs)
+# powerlevel9k
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(host dir rbenv vcs)
+
+# zsh-autosuggestions
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 # ------------------ end of plugin settings ----------------------
 
@@ -124,6 +135,9 @@ alias findp="ps aux | grep"
 
 if [ -x "$(command -v Art)"  ]; then
    alias grepcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp"
+   alias cvp01-00v2="Art cluster grab cvp01-00v2; Art cluster sanitize"
+   alias cvp01-01v2="Art cluster grab cvp01-01v2; Art cluster sanitize"
+   alias cvp03-00v2="Art cluster grab cvp03-00v2; Art cluster sanitize"
 fi
 # if [ -f ~/vim ]; then
 #    alias vi='~/vim'
@@ -132,7 +146,6 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH=/usr/local/bin:$PATH
 export PATH=~/bin:$PATH
 export GOPATH="$HOME/go"
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 export SHELL="/bin/zsh"
 case "$(uname -s)" in
@@ -166,7 +179,6 @@ esac
 
 bindkey "^P" up-line-or-beginning-search
 bindkey "^N" down-line-or-beginning-search
-export TERM='xterm-256color'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
