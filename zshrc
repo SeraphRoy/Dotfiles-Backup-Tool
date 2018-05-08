@@ -95,6 +95,7 @@ smux() {
 # ------------------ plugin settings ----------------------
 
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir rbenv vcs)
 
 # ------------------ end of plugin settings ----------------------
 
