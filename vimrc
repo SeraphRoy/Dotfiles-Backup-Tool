@@ -45,6 +45,7 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
+Plug 'python-mode/python-mode', { 'branch': 'develop' }
 " Plug 'neomake/neomake'
 if has('patch1578')
    Plug 'Yggdroot/LeaderF'
