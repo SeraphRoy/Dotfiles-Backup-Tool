@@ -1,5 +1,7 @@
-# Dotfiles-Backup-Tool
+# Dotfiels backup and tool
 
-Dependencies:
+Personal dotfiles configuration and backup
+
+Dependencies for the scripts:
 - Dropbox
 - pip
