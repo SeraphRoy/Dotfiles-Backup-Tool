@@ -46,22 +46,6 @@ fi
 
 # ------------------- end of necessary installations ------------------------
 
-# ------------------- antigen plugins ------------------------
-
-source "$ANTIGEN"
-antigen use oh-my-zsh
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle git
-antigen bundle autojump
-antigen bundle zsh-users/zsh-syntax-highlighting
-export TERM='xterm-256color'
-POWERLEVEL9K_MODE='nerdfont-complete'
-# need to install nerd-fonts
-antigen theme bhilburn/powerlevel9k powerlevel9k
-antigen apply
-
-# ------------------- end of antigen plugins ------------------------
-
 
 # ------------------ custom functions ----------------------
 
@@ -99,9 +83,11 @@ smux() {
 # ------------------ end of custom functions----------------------
 
 
-# ------------------ plugin settings ----------------------
+# ------------- plugin settings that should come before the plugins ----------------
 
 # powerlevel9k
+export TERM='xterm-256color'
+POWERLEVEL9K_MODE='nerdfont-complete'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%H:%M \uf073 %m/%d/%y}"
 POWERLEVEL9K_SHOW_CHANGESET=true
@@ -111,9 +97,6 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon host dir rbenv vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs time)
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_DIR_SHOW_WRITABLE=true
-
-# zsh-autosuggestions
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 # ------------------ end of plugin settings ----------------------
 
@@ -141,7 +124,7 @@ alias vi='vim'
 alias findp="ps aux | grep"
 
 if [ -x "$(command -v Art)"  ]; then
-   alias grepcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp"
+   alias grabcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp; Art sanitize"
    alias cvp01-00v2="Art cluster grab cvp01-00v2; Art cluster sanitize"
    alias cvp01-01v2="Art cluster grab cvp01-01v2; Art cluster sanitize"
    alias cvp03-00v2="Art cluster grab cvp03-00v2; Art cluster sanitize"
@@ -190,3 +173,26 @@ bindkey "^N" down-line-or-beginning-search
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # ------------------ end of general zsh settings ----------------------
+
+
+# ------------------- antigen plugins ------------------------
+
+source "$ANTIGEN"
+antigen use oh-my-zsh
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle git
+antigen bundle autojump
+antigen bundle zsh-users/zsh-syntax-highlighting
+# need to install nerd-fonts
+antigen theme bhilburn/powerlevel9k powerlevel9k
+antigen apply
+
+# ------------------- end of antigen plugins ------------------------
+
+
+# ------------- plugin settings that should come after the plugins ----------------
+
+# zsh-autosuggestions
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
+
+# --------------------- end of plugin settings ----------------------
