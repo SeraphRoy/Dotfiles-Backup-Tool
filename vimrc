@@ -23,6 +23,7 @@ Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
 Plug 'yggdroot/indentline'
 Plug 'godlygeek/tabular'
+Plug 'romainl/vim-qf'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
@@ -43,7 +44,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
-" Plug 'neomake/neomake'
+Plug 'neomake/neomake'
 if has('patch1578')
    Plug 'Yggdroot/LeaderF'
 "   Plug 'w0rp/ale'
@@ -273,9 +274,24 @@ nmap :term<CR> :term<CR><C-w>J
 " LeaderF settings
 let g:Lf_ShortcutF = '<C-P>'
 let g:Lf_WindowHeight = 0.13
+let g:Lf_CacheDirectory = expand('~/.vim/cache')
 let g:Lf_ShowRelativePath = 0
+let g:Lf_DefaultMode = 'FullPath'
 let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
+let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
+let g:Lf_NormalMap = {
+	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
+	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
+	\ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
+	\ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
+	\ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
+	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
+	\ }
+let g:Lf_WildIgnore = {
+\ 'dir': ['.svn','.git','.hg'],
+   \ 'file': ['*.sw?']
+   \}
 
 " auto pair
 let g:AutoPairsShortcutToggle = ''
@@ -439,14 +455,20 @@ nmap :Run :AsyncRun
 nmap :Stop :AsyncStop
 
 " Neomake
-" call neomake#configure#automake('nrwi')
-" let g:neomake_open_list = 2
+call neomake#configure#automake({
+\ 'TextChanged': {'delay': 500},
+\ 'InsertLeave': {},
+\ 'BufWritePost': {'delay': 0},
+\ 'BufWinEnter': {},
+\ }, 100)
+let g:neomake_open_list = 2
 
 " ALE
 let g:airline#extensions#ale#enabled = 1
-let g:ale_linters = {
-         \ 'python': ['pylint'],
-\ }
+
+" vim-qf
+let g:qf_loclist_window_bottom=0
+let g:qf_window_bottom = 0
 
 "       -------------end of plugin vim settings--------------
 
