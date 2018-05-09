@@ -21,9 +21,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
-" Plug 'w0rp/ale'
 Plug 'yggdroot/indentline'
-Plug 'altercation/vim-colors-solarized'
 Plug 'godlygeek/tabular'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sickill/vim-pasta'
@@ -40,16 +38,15 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'altercation/vim-colors-solarized'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
-Plug 'python-mode/python-mode', { 'branch': 'develop' }
+" Plug 'python-mode/python-mode', { 'branch': 'develop' }
 " Plug 'neomake/neomake'
 if has('patch1578')
    Plug 'Yggdroot/LeaderF'
-   Plug 'w0rp/ale'
+"   Plug 'w0rp/ale'
    Plug 'ludovicchabant/vim-gutentags'
    Plug 'fatih/vim-go'
    Plug 'Valloric/YouCompleteMe'
@@ -92,7 +89,6 @@ let &t_Co=256
 syntax enable
 set background=dark
 colorscheme solarized
-
 
 " line number on
 set number relativenumber
