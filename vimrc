@@ -462,6 +462,8 @@ call neomake#configure#automake({
 \ 'BufWinEnter': {},
 \ }, 100)
 let g:neomake_open_list = 2
+let g:neomake_python_enabled_makers = ['pyflakes']
+
 
 " ALE
 let g:airline#extensions#ale#enabled = 1
