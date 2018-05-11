@@ -106,15 +106,23 @@ POWERLEVEL9K_DIR_SHOW_WRITABLE=true
 # tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
 # tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
 
+cvp_mosh_server="/home/yanxichen/mosh-server-cvp"
+us_mosh_server="/home/yanxichen/mosh-server-us"
+mac_mosh_client="$HOME/mosh/src/frontend/mosh-client"
+new_mosh_script="$HOME/mosh/scripts/mosh"
+
+alias sshus="$new_mosh_script --client=$mac_mosh_client --server=$us_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
+alias sshcvp="$new_mosh_script --ssh='ssh -p 10140' --client=$mac_mosh_client --server=$cvp_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
+
 # alias sshus="mosh us165 -- sh -c \"tmux attach\""
 # alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
-# alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
-# alias sshrecruit="ssh yanxichen@recruit.arista.com"
-
-alias sshus="smux us165"
-alias sshcvp="smux us165 10140"
-alias sshr123s19="smux r123s19 10140"
+alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
 alias sshrecruit="ssh yanxichen@recruit.arista.com"
+
+# alias sshus="smux us165"
+# alias sshcvp="smux us165 10140"
+# alias sshr123s19="smux r123s19 10140"
+# alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 export VISUAL=vim
 export EDITOR=vim
@@ -127,16 +135,17 @@ if [ -x "$(command -v Art)"  ]; then
    alias cvp01-00v2="Art cluster grab cvp01-00v2; Art cluster sanitize"
    alias cvp01-01v2="Art cluster grab cvp01-01v2; Art cluster sanitize"
    alias cvp03-00v2="Art cluster grab cvp03-00v2; Art cluster sanitize"
+   alias mycvp="Art list --pool=cvp | grep yanxichen"
 fi
 # if [ -f ~/vim ]; then
 #    alias vi='~/vim'
 # fi
 export PATH=$PATH:/usr/local/go/bin
 export PATH=/usr/local/bin:$PATH
-export PATH=~/bin:$PATH
 export GOPATH="$HOME/go"
+export LANG=en_US.UTF-8
 
-export SHELL="/bin/zsh"
+export SHELL="$(which zsh)"
 case "$(uname -s)" in
 
    Darwin)
@@ -145,7 +154,7 @@ case "$(uname -s)" in
      if test $(pidof clipper | wc -w) -eq 0; then
         # extra port forwarding for mosh
         # ssh -N -f us165-clipper > /dev/null 2>&1
-        nohup clipper --port 9999 </dev/null >/dev/null 2>&1 &
+        # nohup clipper --port 9999 </dev/null >/dev/null 2>&1 &
      else
         ;
      fi
