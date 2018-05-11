@@ -44,13 +44,12 @@ Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
-Plug 'neomake/neomake'
 if has('patch1578')
    Plug 'Yggdroot/LeaderF'
-"   Plug 'w0rp/ale'
+   Plug 'neomake/neomake'
    Plug 'ludovicchabant/vim-gutentags'
    Plug 'fatih/vim-go'
-   Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 endif
 Plug 'greymd/oscyank.vim'
 Plug 'mhinz/vim-signify'
@@ -215,7 +214,7 @@ function! Terminal_MetaMode(mode)
     endfor
     if a:mode != 0
         for c in [',', '.', '/', ';', '[', ']', '{', '}']
-            call s:metacode(a:mode, c)
+         call s:metacode(a:mode, c)
         endfor
         for c in ['?', ':', '-', '_']
             call s:metacode(a:mode, c)
@@ -427,42 +426,23 @@ endif
 " asyncrun.vim
 let g:asyncrun_status = ''
 let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+
 let g:asyncrun_open = 8
 let g:asyncrun_bell = 1
-function! s:RunMe()
-   if &filetype == "vim"
-      exec 'source %'
-   elseif &filetype == "python"
-      exec 'AsyncRun python %'
-   elseif &filetype == "go"
-      exec 'AsyncRun go run %'
-   endif
-endfunc
-function! s:TestMe()
-   if &filetype == "vim"
-      exec 'source %'
-   elseif &filetype == "python"
-      exec 'AsyncRun python %'
-   elseif &filetype == "go"
-      exec 'AsyncRun go test %'
-   endif
-endfunc
-command! VimRun call s:RunMe()
-command! VimTest call s:TestMe()
-nmap <M-r> :VimRun<cr>
-nmap <M-t> :VimTest<cr>
 nmap :Run :AsyncRun
 nmap :Stop :AsyncStop
 
 " Neomake
-call neomake#configure#automake({
-\ 'TextChanged': {'delay': 500},
-\ 'InsertLeave': {},
-\ 'BufWritePost': {'delay': 0},
-\ 'BufWinEnter': {},
-\ }, 100)
-let g:neomake_open_list = 2
-let g:neomake_python_enabled_makers = ['pyflakes']
+if has('patch1578')
+   call neomake#configure#automake({
+      \ 'TextChanged': {'delay': 500},
+      \ 'InsertLeave': {},
+      \ 'BufWritePost': {'delay': 0},
+      \ 'BufWinEnter': {},
+      \ }, 100)
+   let g:neomake_open_list = 2
+   let g:neomake_python_enabled_makers = ['pyflakes']
+endif
 
 
 " ALE
