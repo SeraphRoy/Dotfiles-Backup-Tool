@@ -51,7 +51,7 @@ if v:version >= 800
    Plug 'neomake/neomake'
 Plug 'ludovicchabant/vim-gutentags'
    Plug 'SeraphRoy/gutentags_plus.vim'
-Plug 'fatih/vim-go'
+   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'Valloric/YouCompleteMe'
 else
 endif
@@ -479,6 +479,15 @@ endif
 " vim-echodoc
 set noshowmode
 let g:echodoc_enable_at_startup = 1
+
+" vim-go
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_metalinter_autosave = 1
+
+
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------
