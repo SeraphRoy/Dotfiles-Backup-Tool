@@ -23,6 +23,7 @@ Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
 Plug 'yggdroot/indentline'
 Plug 'godlygeek/tabular'
+Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sickill/vim-pasta'
@@ -30,7 +31,6 @@ Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
 Plug 'bling/vim-airline'
 Plug 'flazz/vim-colorschemes'
-Plug 'raimondi/delimitmate'
 Plug 'xuhdev/vim-latex-live-preview'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
@@ -38,18 +38,22 @@ Plug 'wellle/targets.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
+Plug 'raimondi/delimitmate'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
+Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
-if has('patch1578')
+if v:version >= 800
    Plug 'Yggdroot/LeaderF'
    Plug 'neomake/neomake'
-   Plug 'ludovicchabant/vim-gutentags'
-   Plug 'fatih/vim-go'
+Plug 'ludovicchabant/vim-gutentags'
+   Plug 'SeraphRoy/gutentags_plus.vim'
+Plug 'fatih/vim-go'
 Plug 'Valloric/YouCompleteMe'
+else
 endif
 Plug 'greymd/oscyank.vim'
 Plug 'mhinz/vim-signify'
@@ -309,6 +313,7 @@ let g:ycm_semantic_triggers =  {
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " ConqueTerm settings
 let g:ConqueTerm_CWInsert = 1
@@ -394,13 +399,16 @@ let g:signify_vcs_cmds_diffmode = {
 
 " vim-gutentags
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'Makefile.am']
 " 所生成的数据文件的名称
 let g:gutentags_ctags_tagfile = '.tags'
 " 同时开启 ctags 和 gtags 支持：
 let g:gutentags_modules = []
 if executable('ctags')
 	let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
 endif
 " if executable('gtags-cscope') && executable('gtags')
 " 	let g:gutentags_modules += ['gtags_cscope']
@@ -419,9 +427,9 @@ if !isdirectory(s:vim_tags)
    silent! call mkdir(s:vim_tags, 'p')
 endif
 "  禁用 gutentags 自动加载 gtags 数据库的行为
-"let g:gutentags_auto_add_gtags_cscope = 0
-"let $GTAGSLABEL = 'native-pygments'
-"let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+let g:gutentags_auto_add_gtags_cscope = 0
+let $GTAGSLABEL = 'native-pygments'
+let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " asyncrun.vim
 let g:asyncrun_status = ''
@@ -433,7 +441,7 @@ nmap :Run :AsyncRun
 nmap :Stop :AsyncStop
 
 " Neomake
-if has('patch1578')
+if v:version >= 800
    call neomake#configure#automake({
       \ 'TextChanged': {'delay': 500},
       \ 'InsertLeave': {},
@@ -445,13 +453,32 @@ if has('patch1578')
 endif
 
 
-" ALE
-let g:airline#extensions#ale#enabled = 1
-
 " vim-qf
 let g:qf_loclist_window_bottom=0
 let g:qf_window_bottom = 0
 
+" gutentas_plus.vim
+if get(g:, 'gutentags_plus_nomap', 0) == 0
+   " 查看光标下符号的引用
+   noremap <silent> <leader>cs :GscopeFind s <C-R><C-W><cr>
+   " 查看光标下符号的定义
+   noremap <silent> <leader>cg :GscopeFind g <C-R><C-W><cr>
+   " 查看有哪些函数调用了该函数
+   noremap <silent> <leader>cc :GscopeFind c <C-R><C-W><cr>
+   noremap <silent> <leader>ct :GscopeFind t <C-R><C-W><cr>
+   noremap <silent> <leader>ce :GscopeFind e <C-R><C-W><cr>
+   " 查找光标下的文件
+   noremap <silent> <leader>cf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+   " 查找哪些文件 include 了本文件
+      noremap <silent> <leader>ci :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+   noremap <silent> <leader>cd :GscopeFind d <C-R><C-W><cr>
+   noremap <silent> <leader>ca :GscopeFind a <C-R><C-W><cr>
+   noremap <silent> <leader>ck :GscopeKill<cr>
+endif
+
+" vim-echodoc
+set noshowmode
+let g:echodoc_enable_at_startup = 1
 "       -------------end of plugin vim settings--------------
 
 "        ------------end of my customized settings---------------------
