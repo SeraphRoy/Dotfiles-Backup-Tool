@@ -112,11 +112,11 @@ mac_mosh_client="$HOME/mosh/src/frontend/mosh-client"
 new_mosh_script="$HOME/mosh/scripts/mosh"
 
 alias sshus="$new_mosh_script --client=$mac_mosh_client --server=$us_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
-alias sshcvp="$new_mosh_script --ssh='ssh -p 10140' --client=$mac_mosh_client --server=$cvp_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
+alias sshcvp="$new_mosh_script --ssh='ssh -p 10140' --client=$mac_mosh_client --server=$cvp_mosh_server us114 -- sh -c \"tmux -CC -u attach\""
 
 # alias sshus="mosh us165 -- sh -c \"tmux attach\""
 # alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
-alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19 -- sh -c \"$tmuxr\""
+alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19"
 alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 # alias sshus="smux us165"
@@ -145,7 +145,6 @@ export PATH=/usr/local/bin:$PATH
 export GOPATH="$HOME/go"
 export LANG=en_US.UTF-8
 
-export SHELL="$(which zsh)"
 case "$(uname -s)" in
 
    Darwin)
@@ -161,7 +160,6 @@ case "$(uname -s)" in
      ;;
    Linux)
      #echo 'Linux'
-     [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
      ;;
    CYGWIN*|MINGW32*|MSYS*)
      #echo 'MS Windows'
