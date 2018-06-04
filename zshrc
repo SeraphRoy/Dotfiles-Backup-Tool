@@ -80,6 +80,10 @@ smux() {
    # autossh -t $@ "tmux attach-session"
 }
 
+grepgo() {
+   grep -n --include "*.go" --exclude "*test.go" --exclude-dir "test" --exclude-dir "mock" --exclude-dir "vendor" "$@"
+}
+
 # ------------------ end of custom functions----------------------
 
 
@@ -143,6 +147,7 @@ fi
 export PATH=$PATH:/usr/local/go/bin
 export PATH=/usr/local/bin:$PATH
 export GOPATH="$HOME/go"
+export PATH=$PATH:$GOPATH/bin
 export LANG=en_US.UTF-8
 
 case "$(uname -s)" in
@@ -202,3 +207,7 @@ antigen apply
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 # --------------------- end of plugin settings ----------------------
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

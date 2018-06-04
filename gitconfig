@@ -1,6 +1,5 @@
 [alias]
    pb = pull --rebase
-   review = push origin HEAD:refs/for/master
    details = log -n1 -p --format=fuller
    co = checkout
    ci = commit

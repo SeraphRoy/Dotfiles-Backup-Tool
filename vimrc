@@ -45,14 +45,15 @@ Plug 'easymotion/vim-easymotion'
 Plug 'bkad/camelcasemotion'
 Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
-" Plug 'python-mode/python-mode', { 'branch': 'develop' }
+Plug 'python-mode/python-mode', { 'branch': 'develop' }
+Plug 'vim-scripts/a.vim'
 if v:version >= 800
    Plug 'Yggdroot/LeaderF'
    Plug 'neomake/neomake'
 Plug 'ludovicchabant/vim-gutentags'
    Plug 'SeraphRoy/gutentags_plus.vim'
    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
 else
 endif
 Plug 'greymd/oscyank.vim'
@@ -450,6 +451,7 @@ if v:version >= 800
       \ }, 100)
    let g:neomake_open_list = 2
    let g:neomake_python_enabled_makers = ['pyflakes']
+   let g:neomake_go_enabled_makers = ['go', 'golint', 'govet']
 endif
 
 
@@ -486,7 +488,12 @@ let g:go_highlight_function_calls = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_metalinter_autosave = 1
+let g:go_metalinter_enabled = ['vet', 'golint']
 
+let g:pymode_rope = 1
+let g:pymode_indent = 1
+let g:pymode_rope_goto_definition_bind = 'gd'
+let g:pymode_rope_goto_definition_cmd = 'new'
 
 "       -------------end of plugin vim settings--------------
 
