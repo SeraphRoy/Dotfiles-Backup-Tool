@@ -116,7 +116,7 @@ mac_mosh_client="$HOME/mosh/src/frontend/mosh-client"
 new_mosh_script="$HOME/mosh/scripts/mosh"
 
 alias sshus="$new_mosh_script --client=$mac_mosh_client --server=$us_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
-alias sshcvp="$new_mosh_script --ssh='ssh -p 10140' --client=$mac_mosh_client --server=$cvp_mosh_server us114 -- sh -c \"tmux -CC -u attach\""
+alias sshcvp="$new_mosh_script --ssh='ssh -p 10240' --client=$mac_mosh_client --server=$cvp_mosh_server us111 -- sh -c \"tmux -CC -u attach\""
 
 # alias sshus="mosh us165 -- sh -c \"tmux attach\""
 # alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
@@ -133,12 +133,14 @@ export EDITOR=vim
 alias grep='grep -n --color=always'
 alias vi='vim'
 alias findp="ps aux | grep"
+alias ku="kubectl"
 
 if [ -x "$(command -v Art)"  ]; then
    alias grabcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp; Art sanitize"
    alias cvp01-00v2="Art cluster grab cvp01-00v2; Art cluster sanitize"
    alias cvp01-01v2="Art cluster grab cvp01-01v2; Art cluster sanitize"
    alias cvp03-00v2="Art cluster grab cvp03-00v2; Art cluster sanitize"
+   alias cvp03-01v2="Art cluster grab cvp03-01v2; Art cluster sanitize"
    alias mycvp="Art list --pool=cvp | grep yanxichen"
 fi
 # if [ -f ~/vim ]; then
@@ -155,13 +157,6 @@ case "$(uname -s)" in
    Darwin)
      #echo 'Mac OS X'
      [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-     if test $(pidof clipper | wc -w) -eq 0; then
-        # extra port forwarding for mosh
-        # ssh -N -f us165-clipper > /dev/null 2>&1
-        # nohup clipper --port 9999 </dev/null >/dev/null 2>&1 &
-     else
-        ;
-     fi
      ;;
    Linux)
      #echo 'Linux'
@@ -211,3 +206,12 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'

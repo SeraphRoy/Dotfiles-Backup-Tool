@@ -25,6 +25,8 @@ Plug 'yggdroot/indentline'
 Plug 'godlygeek/tabular'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
@@ -46,17 +48,15 @@ Plug 'bkad/camelcasemotion'
 Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
 Plug 'python-mode/python-mode', { 'branch': 'develop' }
-Plug 'vim-scripts/a.vim'
 if v:version >= 800
    Plug 'Yggdroot/LeaderF'
    Plug 'neomake/neomake'
 Plug 'ludovicchabant/vim-gutentags'
    Plug 'SeraphRoy/gutentags_plus.vim'
    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
+Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
 else
 endif
-Plug 'greymd/oscyank.vim'
 Plug 'mhinz/vim-signify'
 " Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
@@ -116,6 +116,7 @@ set smartcase
 
 " max length of code is 85
 set cc=86
+autocmd FileType go :set cc=100
 "match Error /\%86v.\+/
 
 " only highlight the overlength but not auto-wrapped
@@ -173,8 +174,17 @@ silent !mkdir /tmp/.vim_backup > /dev/null 2>&1
 set undofile
 set undodir=/tmp/.vim_backup
 
-" " make // to search visual hightlighted content
-" vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " restore cursor position
 if has("autocmd")
@@ -311,10 +321,10 @@ let g:ycm_semantic_triggers =  {
 			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
 			\ 'cs,lua,javascript': ['re!\w{2}'],
 			\ }
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " ConqueTerm settings
 let g:ConqueTerm_CWInsert = 1
@@ -361,13 +371,6 @@ let g:indent_guides_soft_pattern = ' '
 
 "delimitMate
 let delimitMate_balance_matchpairs = 1
-
-" copy to clipboard no matter where you are
-noremap <leader>y :Oscyank<cr>
-nmap yy yy:OscyankRegister<cr>
-nmap dd dd:OscyankRegister<cr>
-vmap y y:OscyankRegister<cr>
-vmap d d:OscyankRegister<cr>
 
 " copy to clipboard no matter where you are
 " nnoremap <leader>y :call system('nc localhost 9999', @0)<CR>
@@ -431,6 +434,7 @@ endif
 let g:gutentags_auto_add_gtags_cscope = 0
 let $GTAGSLABEL = 'native-pygments'
 let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+" let g:gutentags_trace = 1
 
 " asyncrun.vim
 let g:asyncrun_status = ''
@@ -452,6 +456,7 @@ if v:version >= 800
    let g:neomake_open_list = 2
    let g:neomake_python_enabled_makers = ['pyflakes']
    let g:neomake_go_enabled_makers = ['go', 'golint', 'govet']
+   let g:neomake_tex_enabled_makers = []
 endif
 
 
@@ -488,12 +493,31 @@ let g:go_highlight_function_calls = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_metalinter_autosave = 1
-let g:go_metalinter_enabled = ['vet', 'golint']
+let g:go_metalinter_enabled = ['vet', 'golint', 'ineffassign']
+let g:go_fmt_command = "goimports"
 
+" python-mode
+let g:pymode_trim_whitespaces = 0
+" let g:pymode_python = 'python'
 let g:pymode_rope = 1
-let g:pymode_indent = 1
+let g:pymode_rope_completion = 0
 let g:pymode_rope_goto_definition_bind = 'gd'
 let g:pymode_rope_goto_definition_cmd = 'new'
+let g:pymode_lint = 0
+let g:pymode_lint_on_write = 0
+let g:pymode_indent = v:false
+
+" vim-fzf
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 
 "       -------------end of plugin vim settings--------------
 
