@@ -38,6 +38,10 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-repeat'
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'raimondi/delimitmate'
@@ -53,7 +57,7 @@ if v:version >= 800
    Plug 'neomake/neomake'
 Plug 'ludovicchabant/vim-gutentags'
    Plug 'SeraphRoy/gutentags_plus.vim'
-   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
 else
 endif
@@ -518,6 +522,14 @@ let g:pymode_indent = v:false
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+
+" vim-LanguageClient
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['go-langserver'],
+    \ }
+
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 
 "       -------------end of plugin vim settings--------------
 
