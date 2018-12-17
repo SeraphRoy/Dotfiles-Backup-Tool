@@ -28,13 +28,16 @@ Plug 'romainl/vim-qf'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'gabrielelana/vim-markdown'
+Plug 'pangloss/vim-javascript'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
-Plug 'bling/vim-airline'
+" Plug 'bling/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'xuhdev/vim-latex-live-preview'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'xuhdev/vim-latex-live-preview'
+" Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-repeat'
@@ -60,7 +63,8 @@ if v:version >= 800
 Plug 'ludovicchabant/vim-gutentags'
    Plug 'SeraphRoy/gutentags_plus.vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
+" Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 else
 endif
 Plug 'mhinz/vim-signify'
@@ -317,7 +321,17 @@ let g:Lf_WildIgnore = {
 let g:AutoPairsShortcutToggle = ''
 
 " vim-airline theme
-let g:airline_theme="wombat"
+" let g:airline_theme="wombat"
+let g:lightline = {
+   \ 'colorscheme': 'solarized',
+   \ 'active': {
+   \   'left': [ [ 'mode', 'paste' ],
+   \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+   \ },
+   \ 'component_function': {
+   \   'cocstatus': 'coc#status'
+   \ },
+\ }
 
 " youcompleteme settings
 let g:ycm_complete_in_comments=1
@@ -341,7 +355,7 @@ nmap :cv :ConqueTermVSplit bash
 nmap :undo :UndotreeToggle<CR>:UndotreeFocus<CR>
 
 " turn off trailing whitespace detection
-autocmd VimEnter * AirlineToggleWhitespace
+" autocmd VimEnter * AirlineToggleWhitespace
 
 " easymotion settings
 map <Leader>l <Plug>(easymotion-lineforward)
@@ -444,7 +458,7 @@ let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " asyncrun.vim
 let g:asyncrun_status = ''
-let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+" let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 
 let g:asyncrun_open = 8
 let g:asyncrun_bell = 1
@@ -511,7 +525,7 @@ let g:pymode_rope_goto_definition_bind = 'gd'
 let g:pymode_rope_goto_definition_cmd = 'new'
 let g:pymode_lint = 0
 let g:pymode_lint_on_write = 0
-let g:pymode_indent = v:false
+let g:pymode_indent = 0
 
 " vim-fzf
 " --column: Show column number
@@ -532,6 +546,18 @@ let g:LanguageClient_serverCommands = {
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+
+" coc-nvim
+" use <tab> for trigger completion and navigate next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 
 "       -------------end of plugin vim settings--------------
 
