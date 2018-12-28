@@ -571,6 +571,16 @@ nmap <leader>rn <Plug>(coc-rename)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+autocmd BufWritePre *.go call CocAction('format')
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 "       -------------end of plugin vim settings--------------
 
