@@ -23,10 +23,11 @@ Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
 Plug 'yggdroot/indentline'
 Plug 'godlygeek/tabular'
+Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'gabrielelana/vim-markdown'
 Plug 'pangloss/vim-javascript'
@@ -56,17 +57,14 @@ Plug 'tpope/vim-fugitive'
 Plug 'bkad/camelcasemotion'
 Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
-Plug 'python-mode/python-mode', { 'branch': 'develop' }
-if v:version >= 800
-   Plug 'Yggdroot/LeaderF'
-   Plug 'neomake/neomake'
-Plug 'ludovicchabant/vim-gutentags'
-   Plug 'SeraphRoy/gutentags_plus.vim'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Plug 'python-mode/python-mode', { 'branch': 'develop' }
+Plug 'Yggdroot/LeaderF'
+Plug 'neomake/neomake'
+" Plug 'ludovicchabant/vim-gutentags'
+" Plug 'SeraphRoy/gutentags_plus.vim'
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-else
-endif
 Plug 'mhinz/vim-signify'
 " Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
@@ -303,6 +301,8 @@ let g:Lf_ShowRelativePath = 0
 let g:Lf_DefaultMode = 'FullPath'
 let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
+map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
+vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
 let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
@@ -477,6 +477,9 @@ if v:version >= 800
    let g:neomake_python_enabled_makers = ['pyflakes']
    let g:neomake_go_enabled_makers = ['go', 'golint', 'govet']
    let g:neomake_tex_enabled_makers = []
+   let g:neomake_yaml_enabled_makers = []
+   let g:neomake_javascript_enabled_makers = []
+   let g:neomake_python_enabled_makers = []
 endif
 
 
@@ -537,14 +540,14 @@ let g:pymode_indent = 0
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+" command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 
 " vim-LanguageClient
 let g:LanguageClient_serverCommands = {
     \ 'go': ['go-langserver'],
     \ }
 
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 
 " coc-nvim
@@ -558,6 +561,16 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <C-w>] :sp<CR><Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
 
 "       -------------end of plugin vim settings--------------
 
