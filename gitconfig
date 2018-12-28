@@ -19,5 +19,4 @@
 	email = royxagain@gmail.com
 [remote "review-turbine"]
   url = ssh://gerrit:29418/arista
-  push = HEAD:refs/for/master
-  receivepack = git receive-pack --reviewer alexliu --reviewer ryan --reviewer jwang --reviewer jqiu --reviewer alexyang --reviewer eseither --reviewer gsirton --reviewer tomas --reviewer rprada --reviewer cyding --reviewer lreyreaud --reviewer daireomuirgheasa --reviewer paveyry
+   push = HEAD:refs/for/master%r=alexliu,r=ryan,r=jwang,r=jqiu,r=alexyang,r=eseither,r=gsirton,r=tomas,r=rprada,r=cyding,r=lreyreaud,r=daireomuirgheasa,r=paveyry,r=apech,r=jcr,r=jenkins
