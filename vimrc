@@ -21,6 +21,10 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+Plug 'tbabej/taskwiki'
+Plug 'reasonml-editor/vim-reason-plus'
+Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'yggdroot/indentline'
 Plug 'godlygeek/tabular'
 Plug 'idris-hackers/idris-vim'
@@ -29,6 +33,7 @@ Plug 'romainl/vim-qf'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
 Plug 'pangloss/vim-javascript'
 Plug 'sickill/vim-pasta'
@@ -59,7 +64,7 @@ Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
 Plug 'Yggdroot/LeaderF'
-Plug 'neomake/neomake'
+" Plug 'neomake/neomake'
 " Plug 'ludovicchabant/vim-gutentags'
 " Plug 'SeraphRoy/gutentags_plus.vim'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -89,7 +94,7 @@ call plug#end()
 
 "       ------------general vim settings-------------
 
-" <Leader> = ','
+" <Leader> = ' '
 let mapleader=" "
 
 " Syntax Highlight
@@ -160,7 +165,7 @@ set incsearch
 set expandtab
 set tabstop=3
 set shiftwidth=3
-autocmd FileType python :set expandtab tabstop=3 shiftwidth=3
+autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
 
 " backspace
 set backspace=indent,eol,start
@@ -212,12 +217,6 @@ endif
 
 " Configure ALT key for vim
 function! Terminal_MetaMode(mode)
-    set ttimeout
-    if $TMUX != ''
-        set ttimeoutlen=30
-    elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
-        set ttimeoutlen=50
-    endif
     if has('nvim') || has('gui_running')
         return
     endif
@@ -289,6 +288,41 @@ cnoremap <c-d> <del>
 " terminal
 nmap :term<CR> :term<CR><C-w>J
 
+" set auto-completion option
+set completeopt-=preview
+" set completeopt=noselect,noinsert,menuone
+
+" shift blocks in insert mode
+inoremap >> <esc>>>
+inoremap << <esc><<
+
+" replace highlighted block
+map <Leader>re gny:%s`<C-R>"``g<left><left>
+
+" Copy indent from current line when starting a new line
+set autoindent
+
+" When on, a <Tab> in front of a line inserts blanks according to
+" 'shiftwidth'.  'tabstop' or 'softtabstop' is used in other places.  A
+" <BS> will delete a 'shiftwidth' worth of space at the start of the line.
+set smarttab
+
+" Timeout for key mapping sequences.
+set ttimeout
+if $TMUX != ''
+    set ttimeoutlen=30
+elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
+    set ttimeoutlen=50
+endif
+
+" Delete comment character when joining commented lines
+set formatoptions+=j
+
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -303,6 +337,7 @@ let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
 map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
 vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
+map :Find :Leaderf! rg -e
 let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
@@ -319,6 +354,8 @@ let g:Lf_WildIgnore = {
 
 " auto pair
 let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsMapSpace = 0
+let g:AutoPairsMultilineClose = 0
 
 " vim-airline theme
 " let g:airline_theme="wombat"
@@ -335,7 +372,6 @@ let g:lightline = {
 
 " youcompleteme settings
 let g:ycm_complete_in_comments=1
-set completeopt-=preview
 let g:enable_numbers = 0
 let g:ycm_semantic_triggers =  {
 			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
@@ -466,21 +502,21 @@ nmap :Run :AsyncRun
 nmap :Stop :AsyncStop
 
 " Neomake
-if v:version >= 800
-   call neomake#configure#automake({
-      \ 'TextChanged': {'delay': 500},
-      \ 'InsertLeave': {},
-      \ 'BufWritePost': {'delay': 0},
-      \ 'BufWinEnter': {},
-      \ }, 100)
-   let g:neomake_open_list = 2
-   let g:neomake_python_enabled_makers = ['pyflakes']
-   let g:neomake_go_enabled_makers = ['go', 'golint', 'govet']
-   let g:neomake_tex_enabled_makers = []
-   let g:neomake_yaml_enabled_makers = []
-   let g:neomake_javascript_enabled_makers = []
-   let g:neomake_python_enabled_makers = []
-endif
+" if v:version >= 800
+"    call neomake#configure#automake({
+"       \ 'TextChanged': {'delay': 500},
+"       \ 'InsertLeave': {},
+"       \ 'BufWritePost': {'delay': 0},
+"       \ 'BufWinEnter': {},
+"       \ }, 100)
+"    let g:neomake_open_list = 2
+"    let g:neomake_python_enabled_makers = ['pyflakes']
+"    let g:neomake_go_enabled_makers = ['go', 'golint', 'govet']
+"    let g:neomake_tex_enabled_makers = []
+"    let g:neomake_yaml_enabled_makers = []
+"    let g:neomake_javascript_enabled_makers = []
+"    let g:neomake_python_enabled_makers = []
+" endif
 
 
 " vim-qf
@@ -518,6 +554,7 @@ let g:go_highlight_fields = 1
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_enabled = ['vet', 'golint', 'ineffassign']
 let g:go_fmt_command = "goimports"
+let g:go_jump_to_error = 0
 
 " python-mode
 let g:pymode_trim_whitespaces = 0
@@ -571,8 +608,10 @@ nmap <leader>rn <Plug>(coc-rename)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
+let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-autocmd BufWritePre *.go call CocAction('format')
+nmap <silent> [c <Plug>(coc-diagnostic-prev) <Plug>(coc-fix-current)
+nmap <silent> ]c <Plug>(coc-diagnostic-next) <Plug>(coc-fix-current)
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -583,5 +622,33 @@ function! s:show_documentation()
 endfunction
 
 "       -------------end of plugin vim settings--------------
+
+"       ------------platform-specific vim settings-------------
+
+if exists('g:gui_oni')
+   set nocompatible              " be iMproved, required
+   filetype off                  " required
+
+   set number
+   set noswapfile
+   set smartcase
+
+   " Enable GUI mouse behavior
+   set mouse=a
+
+   " If using Oni's externalized statusline, hide vim's native statusline, 
+   set noshowmode
+   set noruler
+   set laststatus=0
+   set noshowcmd
+   " tabs
+   map ¬ :tabn<CR>
+   map ˙ :tabp<CR>
+   map † :tabnew<CR>
+   map ∑ :tabclose<CR>
+endif
+
+"       -------------end of platform-specific vim settings--------------
+
 
 "        ------------end of my customized settings---------------------

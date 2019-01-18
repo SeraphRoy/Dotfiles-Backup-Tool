@@ -129,6 +129,7 @@ alias sshrecruit="ssh yanxichen@recruit.arista.com"
 # alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 export VISUAL=vim
+export ONI_NEOVIM_PATH=$(which nvim)
 export EDITOR=vim
 alias grep='grep -n --color=always'
 alias vi='vim'
@@ -156,7 +157,6 @@ case "$(uname -s)" in
 
    Darwin)
      #echo 'Mac OS X'
-     [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
      ;;
    Linux)
      #echo 'Linux'
@@ -187,10 +187,10 @@ source "$ANTIGEN"
 antigen use oh-my-zsh
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle git
-antigen bundle autojump
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-completions
 antigen bundle MichaelAquilina/zsh-you-should-use
+antigen bundle rupa/z
 # need to install nerd-fonts
 antigen theme bhilburn/powerlevel9k powerlevel9k
 antigen apply
@@ -217,3 +217,6 @@ export NVM_DIR="$HOME/.nvm"
 # --follow: Follow symlinks
 # --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# opam configuration
+test -r /Users/yanxichen/.opam/opam-init/init.zsh && . /Users/yanxichen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

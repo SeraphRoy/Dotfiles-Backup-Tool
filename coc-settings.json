@@ -1,20 +1,30 @@
 {
    "coc.preferences.echodocSupport": true,
+   "coc.preferences.formatOnSaveFiletypes": ["go"],
+   "coc.preferences.diagnostic.infoSign":" ℹ",
+   "coc.preferences.diagnostic.hintSign":" ℹ",
    "pyls.plugins.pycodestyle.enabled": false,
-   "pyls.plugins.pydocstyle.enabled": false,
-   "pyls.plugins.pyflakes.enabled": false,
-   "pyls.plugins.mccabe.enabled": false,
    "javascript.validate.enable": false,
    "languageserver": {
       "golang": {
          "command": "go-langserver",
          "filetypes": ["go"],
          "initializationOptions": {
-            "gocodeCompletionEnabled": true,
             "diagnosticsEnabled": true,
             "formatTool": "goimports",
             "lintTool": "golint"
          }
+      },
+      "ocaml": {
+         "command": "ocaml-language-server",
+         "args": ["--stdio"],
+         "filetypes": ["ocaml", "reason"]
+      },
+      "bash": {
+         "command": "bash-language-server",
+         "args": ["start"],
+         "filetypes": ["sh"],
+         "ignoredRootPaths": ["~"]
       }
    }
 }
