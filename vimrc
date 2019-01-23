@@ -35,6 +35,7 @@ Plug 'romainl/vim-qf'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown' }
 Plug 'pangloss/vim-javascript'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
@@ -322,6 +323,9 @@ set formatoptions+=j
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
+
+" Search for highlighted block
+map <Leader>fd gny:Find <C-R>"<CR>
 
 "       ------------end of general vim settings-------------
 
@@ -620,6 +624,9 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+" markdown-preview-nvim
+let vim_markdown_preview_github=1
 
 "       -------------end of plugin vim settings--------------
 
