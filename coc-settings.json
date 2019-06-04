@@ -10,10 +10,15 @@
          "command": "go-langserver",
          "filetypes": ["go"],
          "initializationOptions": {
-            "diagnosticsEnabled": true,
-            "formatTool": "goimports",
-            "lintTool": "golint"
+            "gocodecompletion": true,
+            "diagnostics": true,
+            "format-tool": "goimports",
+            "lint-tool": "golint"
          }
+      },
+      "golang2": {
+         "command": "gopls",
+         "filetypes": [],
       },
       "ocaml": {
          "command": "ocaml-language-server",

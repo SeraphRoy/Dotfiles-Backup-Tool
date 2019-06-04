@@ -12,6 +12,8 @@
    aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
    branches = branch -av
    brdel = branch -D
+   rbi = rebase -i
+   rbc = rebase --continue
 [color]
     ui = true
 [user]

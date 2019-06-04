@@ -84,6 +84,10 @@ grepgo() {
    grep -n --include "*.go" --exclude "*test.go" --exclude-dir "test" --exclude-dir "mock" --exclude-dir "vendor" "$@"
 }
 
+stress() {
+   while $@; do :; done
+}
+
 # ------------------ end of custom functions----------------------
 
 
@@ -100,6 +104,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir rbenv vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs time)
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_DIR_SHOW_WRITABLE=true
+POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_last
 
 # ------------------ end of plugin settings ----------------------
 
@@ -122,6 +127,8 @@ alias sshcvp="$new_mosh_script --ssh='ssh -p 10240' --client=$mac_mosh_client --
 # alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
 alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19"
 alias sshrecruit="ssh yanxichen@recruit.arista.com"
+alias scpcvp="sshpass -parastra scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+alias lc="leetcode"
 
 # alias sshus="smux us165"
 # alias sshcvp="smux us165 10140"

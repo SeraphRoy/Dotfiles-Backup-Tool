@@ -18,9 +18,10 @@ endif
 call plug#begin('~/.vim/bundle')
 
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'nelstrom/vim-visual-star-search'
 Plug 'vim-latex/vim-latex'
 Plug 'rust-lang/rust.vim'
+Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'tbabej/taskwiki'
 Plug 'reasonml-editor/vim-reason-plus'
@@ -31,8 +32,6 @@ Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown' }
@@ -61,10 +60,14 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'bkad/camelcasemotion'
+Plug 'inkarkat/vim-ingo-library'
+" vim-mark depends on vim-ingo-library
+Plug 'inkarkat/vim-mark'
 Plug 'skywind3000/vim-preview'
 Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
-Plug 'Yggdroot/LeaderF'
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'szw/vim-maximizer'
 " Plug 'neomake/neomake'
 " Plug 'ludovicchabant/vim-gutentags'
 " Plug 'SeraphRoy/gutentags_plus.vim'
@@ -130,11 +133,12 @@ set smartcase
 
 " max length of code is 85
 set cc=86
-autocmd FileType go :set cc=100
+set tw=86
+autocmd FileType go :set cc=100 tw=100
 "match Error /\%86v.\+/
 
 " only highlight the overlength but not auto-wrapped
-set tw=0
+" set tw=0
 
 " maps : to ;
 map ; :
@@ -167,6 +171,7 @@ set expandtab
 set tabstop=3
 set shiftwidth=3
 autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
+autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " backspace
 set backspace=indent,eol,start
@@ -193,11 +198,6 @@ vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy/<C-R><C-R>=substitute(
   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " restore cursor position
@@ -264,12 +264,15 @@ noremap <C-h> <left>
 noremap <C-j> <down>
 noremap <C-k> <up>
 noremap <C-l> <right>
+
+" insert mode as emacs
 inoremap <C-h> <left>
 inoremap <C-j> <down>
 inoremap <C-k> <up>
 inoremap <C-l> <right>
-
-" insert mode as emacs
+" Not use M-* because it will capture <esc>
+inoremap <c-f> <s-right>
+inoremap <c-b> <s-left>
 inoremap <c-a> <home>
 inoremap <c-e> <end>
 inoremap <c-d> <del>
@@ -285,6 +288,8 @@ cnoremap <c-l> <right>
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 cnoremap <c-d> <del>
+cnoremap <c-f> <s-right>
+cnoremap <c-b> <s-left>
 
 " terminal
 nmap :term<CR> :term<CR><C-w>J
@@ -317,7 +322,7 @@ elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
 endif
 
 " Delete comment character when joining commented lines
-set formatoptions+=j
+set formatoptions+=jtl
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
@@ -325,7 +330,10 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
 endif
 
 " Search for highlighted block
-map <Leader>fd gny:Find <C-R>"<CR>
+map <Leader>fd gny:Find<C-R>"<CR>
+
+" Highlight matches without moving
+nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
 "       ------------end of general vim settings-------------
 
@@ -341,7 +349,7 @@ let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
 map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
 vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
-map :Find :Leaderf! rg -e
+map :Find :Leaderf! rg -e ''<left>
 let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
@@ -358,6 +366,7 @@ let g:Lf_WildIgnore = {
 
 " auto pair
 let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsShortcutJump = ''
 let g:AutoPairsMapSpace = 0
 let g:AutoPairsMultilineClose = 0
 
@@ -429,7 +438,7 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup =1
 let g:indent_guides_soft_pattern = ' '
 
-"delimitMate
+" delimitMate
 let delimitMate_balance_matchpairs = 1
 
 " copy to clipboard no matter where you are
@@ -627,6 +636,16 @@ endfunction
 
 " markdown-preview-nvim
 let vim_markdown_preview_github=1
+
+" vim-maximizer
+map <Leader>m :MaximizerToggle<CR>
+
+" vim-mark
+let g:mw_no_mappings = 1
+nmap # <Plug>MarkSet
+xmap # <Plug>MarkSet
+nmap <C-n> <Plug>MarkSearchCurrentNext
+nmap <M-n> <Plug>MarkSearchCurrentPrev
 
 "       -------------end of plugin vim settings--------------
 
