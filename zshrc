@@ -159,6 +159,7 @@ export PATH=/usr/local/bin:$PATH
 export GOPATH="$HOME/go"
 export PATH=$PATH:$GOPATH/bin
 export LANG=en_US.UTF-8
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 case "$(uname -s)" in
 

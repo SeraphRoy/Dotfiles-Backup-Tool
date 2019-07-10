@@ -18,10 +18,12 @@ endif
 call plug#begin('~/.vim/bundle')
 
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'vim-latex/vim-latex'
+" Plug 'vim-latex/vim-latex'
+Plug 'lervag/vimtex'
+Plug   'KeitaNakamura/tex-conceal.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'martinda/Jenkinsfile-vim-syntax'
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'tbabej/taskwiki'
 Plug 'reasonml-editor/vim-reason-plus'
@@ -34,14 +36,16 @@ Plug 'romainl/vim-qf'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown' }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown' }
 Plug 'pangloss/vim-javascript'
+Plug 'tpope/vim-commentary'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
 " Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
-Plug 'flazz/vim-colorschemes'
+" Plug 'flazz/vim-colorschemes'
+Plug 'morhetz/gruvbox'
 " Plug 'xuhdev/vim-latex-live-preview'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
@@ -105,12 +109,14 @@ let mapleader=" "
 syntax on
 
 " 256 color
-let &t_Co=256
+set termguicolors
+" let &t_Co=256
 
 " color scheme/theme
 syntax enable
 set background=dark
-colorscheme solarized
+let g:gruvbox_italic=1
+colorscheme gruvbox
 
 " line number on
 set number relativenumber
@@ -335,6 +341,18 @@ map <Leader>fd gny:Find<C-R>"<CR>
 " Highlight matches without moving
 nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+" viminfo
+set viminfo+=!
+
+" If this many milliseconds nothing is typed the swap file will be written to disk
+"  Also used for the CursorHold autocommand event.
+set updatetime=300
+
+" spell checking
+" setlocal spell
+" set spelllang=en_us
+" inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -373,7 +391,7 @@ let g:AutoPairsMultilineClose = 0
 " vim-airline theme
 " let g:airline_theme="wombat"
 let g:lightline = {
-   \ 'colorscheme': 'solarized',
+   \ 'colorscheme': 'gruvbox',
    \ 'active': {
    \   'left': [ [ 'mode', 'paste' ],
    \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
@@ -422,6 +440,13 @@ let g:which_bibliography = 'biber'
 " vim-latex settings
 let g:Tex_CompileRule_pdf = 'pdflatex $*'
 let g:Imap_UsePlaceHolders = 0
+
+" vimtex settings
+let g:tex_flavor = 'latex'
+
+" tex-conceal.vim settings
+set conceallevel=2
+let g:tex_conceal="abdgms"
 
 " Rainbow Paranthesis
 let g:rainbow_active = 1
@@ -623,8 +648,8 @@ let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
 let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nmap <silent> [c <Plug>(coc-diagnostic-prev) <Plug>(coc-fix-current)
-nmap <silent> ]c <Plug>(coc-diagnostic-next) <Plug>(coc-fix-current)
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 function! s:show_documentation()
   if &filetype == 'vim'

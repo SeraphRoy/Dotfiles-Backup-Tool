@@ -1,10 +1,20 @@
 {
    "coc.preferences.echodocSupport": true,
-   "coc.preferences.formatOnSaveFiletypes": ["go"],
+   "coc.preferences.useQuickfixForLocations": true,
+   "coc.preferences.formatOnSaveFiletypes": ["go", "reason"],
    "coc.preferences.diagnostic.infoSign":" ℹ",
    "coc.preferences.diagnostic.hintSign":" ℹ",
+   "snippets.ultisnips.directories": [
+      "UltiSnips",
+     "my-snippets",
+   ],
    "pyls.plugins.pycodestyle.enabled": false,
    "javascript.validate.enable": false,
+   "java.autobuild.enabled": false,
+   "java.format.onType.enabled": false,
+   "java.import.maven.enabled": true,
+   "java.maven.downloadSources": true,
+   "java.configuration.updateBuildConfiguration": "automatic",
    "languageserver": {
       "golang": {
          "command": "go-langserver",
