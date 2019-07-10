@@ -1,17 +1,17 @@
 " Include the system settings
 if filereadable( "/etc/vimrc" )
-  source /etc/vimrc
+   source /etc/vimrc
 endif
 " Include Arista-specific settings
 if filereadable( "/usr/share/vim/vimfiles/arista.vim" )
-source /usr/share/vim/vimfiles/arista.vim
+   source /usr/share/vim/vimfiles/arista.vim
 endif
 
 " download vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+            \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " vim-plug begin
@@ -29,6 +29,7 @@ Plug 'tbabej/taskwiki'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'yggdroot/indentline'
+" Plug 'nathanaelkane/vim-indent-guides'
 Plug 'godlygeek/tabular'
 Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
@@ -115,7 +116,9 @@ set termguicolors
 " color scheme/theme
 syntax enable
 set background=dark
-let g:gruvbox_italic=1
+let g:gruvbox_italic = 1
+let g:gruvbox_invert_indent_guides = 1
+let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
 
 " line number on
@@ -201,15 +204,15 @@ set undodir=/tmp/.vim_backup
 
 " Search for selected text, forwards or backwards.
 vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+         \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+         \gvy/<C-R><C-R>=substitute(
+         \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+         \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " restore cursor position
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
+   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+            \| exe "normal! g'\"" | endif
 endif
 
 " " toggle paste mode automatically when paste
@@ -224,38 +227,38 @@ endif
 
 " Configure ALT key for vim
 function! Terminal_MetaMode(mode)
-    if has('nvim') || has('gui_running')
-        return
-    endif
-    function! s:metacode(mode, key)
-        if a:mode == 0
-            exec "set <M-".a:key.">=\e".a:key
-        else
-            exec "set <M-".a:key.">=\e]{0}".a:key."~"
-        endif
-    endfunc
-    for i in range(10)
-        call s:metacode(a:mode, nr2char(char2nr('0') + i))
-    endfor
-    for i in range(26)
-        call s:metacode(a:mode, nr2char(char2nr('a') + i))
-        call s:metacode(a:mode, nr2char(char2nr('A') + i))
-    endfor
-    if a:mode != 0
-        for c in [',', '.', '/', ';', '[', ']', '{', '}']
+   if has('nvim') || has('gui_running')
+      return
+   endif
+   function! s:metacode(mode, key)
+      if a:mode == 0
+         exec "set <M-".a:key.">=\e".a:key
+      else
+         exec "set <M-".a:key.">=\e]{0}".a:key."~"
+      endif
+   endfunc
+   for i in range(10)
+      call s:metacode(a:mode, nr2char(char2nr('0') + i))
+   endfor
+   for i in range(26)
+      call s:metacode(a:mode, nr2char(char2nr('a') + i))
+      call s:metacode(a:mode, nr2char(char2nr('A') + i))
+   endfor
+   if a:mode != 0
+      for c in [',', '.', '/', ';', '[', ']', '{', '}']
          call s:metacode(a:mode, c)
-        endfor
-        for c in ['?', ':', '-', '_']
-            call s:metacode(a:mode, c)
-        endfor
-    else
-        for c in [',', '.', '/', ';', '{', '}']
-            call s:metacode(a:mode, c)
-        endfor
-        for c in ['?', ':', '-', '_']
-            call s:metacode(a:mode, c)
-        endfor
-    endif
+      endfor
+      for c in ['?', ':', '-', '_']
+         call s:metacode(a:mode, c)
+      endfor
+   else
+      for c in [',', '.', '/', ';', '{', '}']
+         call s:metacode(a:mode, c)
+      endfor
+      for c in ['?', ':', '-', '_']
+         call s:metacode(a:mode, c)
+      endfor
+   endif
 endfunc
 
 call Terminal_MetaMode(0) 
@@ -322,9 +325,9 @@ set smarttab
 " Timeout for key mapping sequences.
 set ttimeout
 if $TMUX != ''
-    set ttimeoutlen=30
+   set ttimeoutlen=30
 elseif &ttimeoutlen > 80 || &ttimeoutlen <= 0
-    set ttimeoutlen=50
+   set ttimeoutlen=50
 endif
 
 " Delete comment character when joining commented lines
@@ -332,7 +335,7 @@ set formatoptions+=jtl
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
+   runtime! macros/matchit.vim
 endif
 
 " Search for highlighted block
@@ -353,6 +356,9 @@ set updatetime=300
 " set spelllang=en_us
 " inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
+" show indentation for tabs
+set list lcs=tab:\|\ " note a space at the end
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -370,17 +376,17 @@ vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
 map :Find :Leaderf! rg -e ''<left>
 let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
 let g:Lf_NormalMap = {
-	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
-	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
-	\ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
-	\ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
-	\ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
-	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
-	\ }
+         \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
+         \ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
+         \ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
+         \ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
+         \ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
+         \ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
+         \ }
 let g:Lf_WildIgnore = {
-\ 'dir': ['.svn','.git','.hg'],
-   \ 'file': ['*.sw?']
-   \}
+         \ 'dir': ['.svn','.git','.hg'],
+         \ 'file': ['*.sw?']
+         \}
 
 " auto pair
 let g:AutoPairsShortcutToggle = ''
@@ -391,23 +397,23 @@ let g:AutoPairsMultilineClose = 0
 " vim-airline theme
 " let g:airline_theme="wombat"
 let g:lightline = {
-   \ 'colorscheme': 'gruvbox',
-   \ 'active': {
-   \   'left': [ [ 'mode', 'paste' ],
-   \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-   \ },
-   \ 'component_function': {
-   \   'cocstatus': 'coc#status'
-   \ },
-\ }
+         \ 'colorscheme': 'gruvbox',
+         \ 'active': {
+         \   'left': [ [ 'mode', 'paste' ],
+         \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+         \ },
+         \ 'component_function': {
+         \   'cocstatus': 'coc#status'
+         \ },
+         \ }
 
 " youcompleteme settings
 let g:ycm_complete_in_comments=1
 let g:enable_numbers = 0
 let g:ycm_semantic_triggers =  {
-			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-			\ 'cs,lua,javascript': ['re!\w{2}'],
-			\ }
+         \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+         \ 'cs,lua,javascript': ['re!\w{2}'],
+         \ }
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " deoplete
@@ -456,12 +462,12 @@ let g:rainbow_active = 1
 " au Syntax * RainbowParenthesesLoadBraces
 
 " indent-guides
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=236
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup =1
-let g:indent_guides_soft_pattern = ' '
+" let g:indent_guides_auto_colors = 0
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=236
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+" let g:indent_guides_guide_size = 1
+" let g:indent_guides_enable_on_vim_startup =1
+" let g:indent_guides_soft_pattern = ' '
 
 " delimitMate
 let delimitMate_balance_matchpairs = 1
@@ -480,19 +486,19 @@ call camelcasemotion#CreateMotionMappings('<leader>')
 nmap - <plug>(signify-prev-hunk)
 nmap = <plug>(signify-next-hunk)
 let g:signify_vcs_cmds = {
-  \ 'git':      'git diff --no-color --no-ext-diff -U0 -- %f',
-  \ 'perforce': 'a4 info '. sy#util#shell_redirect('%n') .' && env P4DIFF=%d a4 diff -du 0 %f'
-  \ }
+         \ 'git':      'git diff --no-color --no-ext-diff -U0 -- %f',
+         \ 'perforce': 'a4 info '. sy#util#shell_redirect('%n') .' && env P4DIFF=%d a4 diff -du 0 %f'
+         \ }
 nmap :diff :SignifyDiff
 let g:signify_vcs_cmds_diffmode = {
-  \ 'git':      'git show HEAD:./%f',
-  \ 'hg':       'hg cat %f',
-  \ 'svn':      'svn cat %f',
-  \ 'bzr':      'bzr cat %f',
-  \ 'darcs':    'darcs show contents -- %f',
-  \ 'cvs':      'cvs up -p -- %f 2>%n',
-  \ 'perforce': 'a4 print %f',
-  \ }
+         \ 'git':      'git show HEAD:./%f',
+         \ 'hg':       'hg cat %f',
+         \ 'svn':      'svn cat %f',
+         \ 'bzr':      'bzr cat %f',
+         \ 'darcs':    'darcs show contents -- %f',
+         \ 'cvs':      'cvs up -p -- %f 2>%n',
+         \ 'perforce': 'a4 print %f',
+         \ }
 <
 
 " vim-gutentags
@@ -503,10 +509,10 @@ let g:gutentags_ctags_tagfile = '.tags'
 " 同时开启 ctags 和 gtags 支持：
 let g:gutentags_modules = []
 if executable('ctags')
-	let g:gutentags_modules += ['ctags']
+   let g:gutentags_modules += ['ctags']
 endif
 if executable('gtags-cscope') && executable('gtags')
-	let g:gutentags_modules += ['gtags_cscope']
+   let g:gutentags_modules += ['gtags_cscope']
 endif
 " if executable('gtags-cscope') && executable('gtags')
 " 	let g:gutentags_modules += ['gtags_cscope']
@@ -574,7 +580,7 @@ if get(g:, 'gutentags_plus_nomap', 0) == 0
    " 查找光标下的文件
    noremap <silent> <leader>cf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
    " 查找哪些文件 include 了本文件
-      noremap <silent> <leader>ci :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+   noremap <silent> <leader>ci :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
    noremap <silent> <leader>cd :GscopeFind d <C-R><C-W><cr>
    noremap <silent> <leader>ca :GscopeFind a <C-R><C-W><cr>
    noremap <silent> <leader>ck :GscopeKill<cr>
@@ -619,8 +625,8 @@ let g:pymode_indent = 0
 
 " vim-LanguageClient
 let g:LanguageClient_serverCommands = {
-    \ 'go': ['go-langserver'],
-    \ }
+         \ 'go': ['go-langserver'],
+         \ }
 
 " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -628,14 +634,14 @@ let g:LanguageClient_serverCommands = {
 " coc-nvim
 " use <tab> for trigger completion and navigate next complete item
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+   let col = col('.') - 1
+   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+         \ pumvisible() ? "\<C-n>" :
+         \ <SID>check_back_space() ? "\<TAB>" :
+         \ coc#refresh()
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> <C-w>] :sp<CR><Plug>(coc-definition)
@@ -650,13 +656,14 @@ let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
+autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+   if &filetype == 'vim'
+      execute 'h '.expand('<cword>')
+   else
+      call CocAction('doHover')
+   endif
 endfunction
 
 " markdown-preview-nvim

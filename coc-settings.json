@@ -1,9 +1,10 @@
 {
-   "coc.preferences.echodocSupport": true,
+   "suggest.echodocSupport": true,
    "coc.preferences.useQuickfixForLocations": true,
    "coc.preferences.formatOnSaveFiletypes": ["go", "reason"],
-   "coc.preferences.diagnostic.infoSign":" ℹ",
-   "coc.preferences.diagnostic.hintSign":" ℹ",
+   "diagnostic.infoSign":"ℹ",
+   "diagnostic.hintSign":"ℹ",
+   "diagnostic.errorSign": "✗",
    "snippets.ultisnips.directories": [
       "UltiSnips",
      "my-snippets",
@@ -18,7 +19,7 @@
    "languageserver": {
       "golang": {
          "command": "go-langserver",
-         "filetypes": ["go"],
+         "filetypes": [],
          "initializationOptions": {
             "gocodecompletion": true,
             "diagnostics": true,
@@ -28,7 +29,7 @@
       },
       "golang2": {
          "command": "gopls",
-         "filetypes": [],
+         "filetypes": ["go"],
       },
       "ocaml": {
          "command": "ocaml-language-server",
