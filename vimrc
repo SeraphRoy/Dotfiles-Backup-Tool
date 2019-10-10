@@ -2,10 +2,6 @@
 if filereadable( "/etc/vimrc" )
    source /etc/vimrc
 endif
-" Include Arista-specific settings
-if filereadable( "/usr/share/vim/vimfiles/arista.vim" )
-   source /usr/share/vim/vimfiles/arista.vim
-endif
 
 " download vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -37,7 +33,7 @@ Plug 'romainl/vim-qf'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
 Plug 'sickill/vim-pasta'
@@ -83,6 +79,9 @@ Plug 'mhinz/vim-signify'
 " Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
 " " All of your Plugins must be added before the following line
+
+" Always load the vim-devicons as the very last one.
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 " " To ignore plugin indent changes, instead use:
 " "filetype plugin on
@@ -116,10 +115,11 @@ set termguicolors
 " color scheme/theme
 syntax enable
 set background=dark
-let g:gruvbox_italic = 1
-let g:gruvbox_invert_indent_guides = 1
 let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
+
+set cmdheight=2
+set shortmess=a
 
 " line number on
 set number relativenumber
@@ -177,9 +177,10 @@ set incsearch
 
 " indentation
 set expandtab
-set tabstop=3
-set shiftwidth=3
-autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+" autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
 autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " backspace
@@ -308,8 +309,8 @@ set completeopt-=preview
 " set completeopt=noselect,noinsert,menuone
 
 " shift blocks in insert mode
-inoremap >> <esc>>>
-inoremap << <esc><<
+" inoremap >> <esc>>>
+" inoremap << <esc><<
 
 " replace highlighted block
 map <Leader>re gny:%s`<C-R>"``g<left><left>
@@ -394,18 +395,28 @@ let g:AutoPairsShortcutJump = ''
 let g:AutoPairsMapSpace = 0
 let g:AutoPairsMultilineClose = 0
 
-" vim-airline theme
-" let g:airline_theme="wombat"
+" vim-devicons and lightline.vim integration
+function! DeviconsFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+
+function! DeviconsFileformat()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
+
+" lightline.vim
 let g:lightline = {
          \ 'colorscheme': 'gruvbox',
-         \ 'active': {
+     \ 'active': {
          \   'left': [ [ 'mode', 'paste' ],
          \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
          \ },
          \ 'component_function': {
-         \   'cocstatus': 'coc#status'
+         \   'cocstatus': 'coc#status',
+         \   'filetype': 'DeviconsFiletype',
+         \   'fileformat': 'DeviconsFileformat',
          \ },
-         \ }
+     \ }
 
 " youcompleteme settings
 let g:ycm_complete_in_comments=1
@@ -656,7 +667,7 @@ let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
-autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+" autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 function! s:show_documentation()
    if &filetype == 'vim'
@@ -667,7 +678,10 @@ function! s:show_documentation()
 endfunction
 
 " markdown-preview-nvim
-let vim_markdown_preview_github=1
+" let vim_markdown_preview_github=1
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ }
 
 " vim-maximizer
 map <Leader>m :MaximizerToggle<CR>

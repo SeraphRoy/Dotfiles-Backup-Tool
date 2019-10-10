@@ -115,25 +115,7 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_last
 # tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
 # tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
 
-cvp_mosh_server="/home/yanxichen/mosh-server-cvp"
-us_mosh_server="/home/yanxichen/mosh-server-us"
-mac_mosh_client="$HOME/mosh/src/frontend/mosh-client"
-new_mosh_script="$HOME/mosh/scripts/mosh"
-
-alias sshus="$new_mosh_script --client=$mac_mosh_client --server=$us_mosh_server us165 -- sh -c \"tmux -CC -u attach\""
-alias sshcvp="$new_mosh_script --ssh='ssh -p 10240' --client=$mac_mosh_client --server=$cvp_mosh_server us111 -- sh -c \"tmux -CC -u attach\""
-
-# alias sshus="mosh us165 -- sh -c \"tmux attach\""
-# alias sshcvp="mosh --ssh='ssh -p 10140' us165 -- sh -c \"$tmuxr\""
-alias sshr123s19="mosh --ssh='ssh -p 10140' r123s19"
-alias sshrecruit="ssh yanxichen@recruit.arista.com"
-alias scpcvp="sshpass -parastra scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 alias lc="leetcode"
-
-# alias sshus="smux us165"
-# alias sshcvp="smux us165 10140"
-# alias sshr123s19="smux r123s19 10140"
-# alias sshrecruit="ssh yanxichen@recruit.arista.com"
 
 export VISUAL=vim
 export ONI_NEOVIM_PATH=$(which nvim)
@@ -143,23 +125,13 @@ alias vi='vim'
 alias findp="ps aux | grep"
 alias ku="kubectl"
 
-if [ -x "$(command -v Art)"  ]; then
-   alias grabcvp="Art grab `Art list --pool=cvp | grep free | awk '{print $2}' | head -n 1` --pool=cvp; Art sanitize"
-   alias cvp01-00v2="Art cluster grab cvp01-00v2; Art cluster sanitize"
-   alias cvp01-01v2="Art cluster grab cvp01-01v2; Art cluster sanitize"
-   alias cvp03-00v2="Art cluster grab cvp03-00v2; Art cluster sanitize"
-   alias cvp03-01v2="Art cluster grab cvp03-01v2; Art cluster sanitize"
-   alias mycvp="Art list --pool=cvp | grep yanxichen"
-fi
-# if [ -f ~/vim ]; then
-#    alias vi='~/vim'
-# fi
 export PATH=$PATH:/usr/local/go/bin
 export PATH=/usr/local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.toolbox/bin:$PATH
 export GOPATH="$HOME/go"
 export PATH=$PATH:$GOPATH/bin
 export LANG=en_US.UTF-8
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home
 
 case "$(uname -s)" in
 
@@ -198,9 +170,10 @@ antigen bundle git
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-completions
 antigen bundle MichaelAquilina/zsh-you-should-use
-antigen bundle rupa/z
+antigen bundle skywind3000/z.lua
 # need to install nerd-fonts
-antigen theme bhilburn/powerlevel9k powerlevel9k
+# antigen theme bhilburn/powerlevel9k powerlevel9k
+antigen theme romkatv/powerlevel10k
 antigen apply
 
 # ------------------- end of antigen plugins ------------------------
@@ -225,6 +198,9 @@ export NVM_DIR="$HOME/.nvm"
 # --follow: Follow symlinks
 # --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# z.lua enhanced matching algorithm 
+export _ZL_MATCH_MODE=1
 
 # opam configuration
 test -r /Users/yanxichen/.opam/opam-init/init.zsh && . /Users/yanxichen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
