@@ -114,6 +114,8 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$HOME/.toolbox/bin:$PATH
 export GOPATH="$HOME/go"
 export PATH=$PATH:$GOPATH/bin
+export PATH=$HOME/.toolbox/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 export LANG=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home
 
