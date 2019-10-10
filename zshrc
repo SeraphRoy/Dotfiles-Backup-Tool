@@ -28,22 +28,6 @@ if [ ! -f "$ANTIGEN" ]; then
 	mv "$TMPFILE" "$ANTIGEN"
 fi
 
-# install powerline font if not exist
-if ! fc-list | grep powerline > /dev/null; then
-   echo "Installing powerline font ..."
-   dir="fonts"
-   git clone https://github.com/powerline/fonts.git --depth=1 $dir
-   cd $dir
-   ./install.sh
-   cd ..
-   rm -rf $dir
-   git clone https://github.com/gabrielelana/awesome-terminal-fonts $dir
-   cd $dir
-   ./install.sh
-   cd ..
-   rm -rf $dir
-fi
-
 # ------------------- end of necessary installations ------------------------
 
 

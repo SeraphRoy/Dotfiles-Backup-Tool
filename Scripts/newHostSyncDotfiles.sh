@@ -24,7 +24,6 @@ case "$(uname -s)" in
      ;;
 esac
 
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp -f ~/Dropbox/Dotfiles/dotfilesrc ~/.dotfilesrc
 sudo pip install --upgrade dotfiles
 dotfiles -s -f
