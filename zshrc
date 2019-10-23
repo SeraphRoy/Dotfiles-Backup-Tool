@@ -104,6 +104,9 @@ alias lc="leetcode"
 export VISUAL=vim
 export ONI_NEOVIM_PATH=$(which nvim)
 export EDITOR=vim
+alias bb="brazil-build"
+alias bbs="brazil-build server"
+alias b="brazil"
 alias grep='grep -n --color=always'
 alias vi='vim'
 alias findp="ps aux | grep"
@@ -190,3 +193,9 @@ export _ZL_MATCH_MODE=1
 
 # opam configuration
 test -r /Users/yanxichen/.opam/opam-init/init.zsh && . /Users/yanxichen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
