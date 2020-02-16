@@ -1,16 +1,17 @@
 {
    "suggest.echodocSupport": true,
    "coc.preferences.useQuickfixForLocations": true,
-   "coc.preferences.formatOnSaveFiletypes": ["go", "reason"],
+   "coc.preferences.formatOnSaveFiletypes": ["go", "reason, java"],
    "diagnostic.infoSign":"ℹ",
    "diagnostic.hintSign":"ℹ",
    "diagnostic.errorSign": "✗",
    "java.autobuild.enabled": false,
+   "java.format.enabled": true,
    "java.format.settings.url": "/Users/yanxiche/ADGDiscoveryCodeStyle.xml",
-   "java.format.onType.enabled": false,
    "java.import.maven.enabled": true,
    "java.maven.downloadSources": true,
    "java.configuration.updateBuildConfiguration": "automatic",
+   "java.jdt.ls.vmargs": "-javaagent:/Volumes/workplace/lombok.jar -Xbootclasspath/a:/Volumes/workplace/lombok.jar",
    "languageserver": {
       "golang": {
          "command": "go-langserver",

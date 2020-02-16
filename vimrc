@@ -34,6 +34,8 @@ Plug 'romainl/vim-qf'
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
 Plug 'sickill/vim-pasta'
@@ -47,11 +49,21 @@ Plug 'gruvbox-community/gruvbox'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'oplatek/conque-shell'
 Plug 'wellle/targets.vim'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 " Plug 'autozimu/LanguageClient-neovim', {
 "     \ 'branch': 'next',
 "     \ 'do': 'bash install.sh',
 "     \ }
+if has('nvim')
+  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'kristijanhusak/defx-git'
+Plug 'kristijanhusak/defx-icons'
+else
+  Plug 'Shougo/defx.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'raimondi/delimitmate'
@@ -61,6 +73,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'bkad/camelcasemotion'
+Plug 'tpope/vim-projectionist'
 Plug 'inkarkat/vim-ingo-library'
 " vim-mark depends on vim-ingo-library
 Plug 'inkarkat/vim-mark'
@@ -118,8 +131,10 @@ set background=dark
 let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
 
-set cmdheight=2
-set shortmess=a
+if !has('nvim')
+    set cmdheight=2
+    set shortmess=a
+endif
 
 " line number on
 set number relativenumber
@@ -141,8 +156,8 @@ set ignorecase
 set smartcase
 
 " max length of code is 85
-set cc=86
-set tw=86
+set cc=140
+set tw=140
 autocmd FileType go :set cc=100 tw=100
 "match Error /\%86v.\+/
 
@@ -360,6 +375,15 @@ set updatetime=300
 " show indentation for tabs
 set list lcs=tab:\|\ " note a space at the end
 
+if has('nvim')
+    set inccommand=nosplit
+endif
+
+nnoremap <M-t> :tabnew<CR>
+nnoremap <M-h> gT
+nnoremap <M-l> gt
+nnoremap <M-w> :tabclose<CR>
+
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
@@ -511,6 +535,10 @@ let g:signify_vcs_cmds_diffmode = {
          \ 'perforce': 'a4 print %f',
          \ }
 <
+let g:signify_sign_add               = '+'
+let g:signify_sign_delete            = '_'
+let g:signify_sign_delete_first_line = '‾'
+let g:signify_sign_change            = '!'
 
 " vim-gutentags
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
@@ -692,6 +720,105 @@ nmap # <Plug>MarkSet
 xmap # <Plug>MarkSet
 nmap <C-n> <Plug>MarkSearchCurrentNext
 nmap <M-n> <Plug>MarkSearchCurrentPrev
+
+" vim-projectionist
+let g:projectionist_heuristics = {}
+let g:projectionist_heuristics["Config"] = {
+    \ "src/com/amazon/*.java": {"alternate": "tst/com/amazon/{}Test.java"},
+    \ "tst/com/amazon/*Test.java": {"alternate": "src/com/amazon/{}.java"},
+\ }
+
+" defx
+call defx#custom#option('_', {
+      \ 'winwidth': 70,
+      \ 'split': 'vertical',
+      \ 'direction': 'botright',
+      \ 'show_ignored_files': 0,
+      \ 'buffer_name': '',
+      \ 'toggle': 1,
+      \ 'resume': 1,
+      \ 'columns': 'git:mark:indent:icons:filename:type',
+  \ })
+
+autocmd FileType defx call s:defx_my_settings()
+function! s:defx_my_settings() abort
+  " Define mappings
+  " nnoremap <silent><buffer><expr> <CR> 
+  " \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> <CR>
+  \ defx#is_directory() ?
+  \ defx#do_action('open_or_close_tree') :
+  \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> <M-CR>
+  \ defx#do_action('open_tree_recursive')
+  " nnoremap <silent><buffer><expr> l
+  " \ defx#do_action('open_tree')
+  " nnoremap <silent><buffer><expr> <S-l>
+  " \ defx#do_action('open_tree_recursive')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> <C-l>
+  \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> > defx#do_action('resize',
+  \ defx#get_context().winwidth - 10)
+  nnoremap <silent><buffer><expr> < defx#do_action('resize',
+  \ defx#get_context().winwidth + 10)
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  " nnoremap <silent><buffer><expr> c
+  " \ defx#do_action('copy')
+  " nnoremap <silent><buffer><expr> m
+  " \ defx#do_action('move')
+" nnoremap <silent><buffer><expr> p
+  " \ defx#do_action('paste')
+  " nnoremap <silent><buffer><expr> E
+  " \ defx#do_action('open', 'vsplit')
+  " nnoremap <silent><buffer><expr> P
+  " \ defx#do_action('open', 'pedit')
+  " nnoremap <silent><buffer><expr> K
+  " \ defx#do_action('new_directory')
+  " nnoremap <silent><buffer><expr> N
+  " \ defx#do_action('new_file')
+  " nnoremap <silent><buffer><expr> M
+  " \ defx#do_action('new_multiple_files')
+  " nnoremap <silent><buffer><expr> C
+  " \ defx#do_action('toggle_columns',
+  " \                'mark:indent:icon:filename:type:size:time')
+  " nnoremap <silent><buffer><expr> S
+  " \ defx#do_action('toggle_sort', 'time')
+  " nnoremap <silent><buffer><expr> r
+  " \ defx#do_action('rename')
+  " nnoremap <silent><buffer><expr> !
+  " \ defx#do_action('execute_command')
+  " nnoremap <silent><buffer><expr> x
+  " \ defx#do_action('execute_system')
+  " nnoremap <silent><buffer><expr> yy
+  " \ defx#do_action('yank_path')
+  " nnoremap <silent><buffer><expr> .
+  " \ defx#do_action('toggle_ignored_files')
+  " nnoremap <silent><buffer><expr> ;
+  " \ defx#do_action('repeat')
+  " nnoremap <silent><buffer><expr> ~
+  " \ defx#do_action('cd')
+  " nnoremap <silent><buffer><expr> q
+  " \ defx#do_action('quit')
+  " nnoremap <silent><buffer><expr> <Space>
+  " \ defx#do_action('toggle_select') . 'j'
+  " nnoremap <silent><buffer><expr> *
+  " \ defx#do_action('toggle_select_all')
+  " nnoremap <silent><buffer><expr> j
+  " \ line('.') == line('$') ? 'gg' : 'j'
+  " nnoremap <silent><buffer><expr> k
+  " \ line('.') == 1 ? 'G' : 'k'
+  " nnoremap <silent><buffer><expr> <C-g>
+  " \ defx#do_action('print')
+endfunction
+
+" Make cursor return back to main window
+" autocmd VimEnter,TabNewEntered * Defx | wincmd w
+" autocmd bufenter * if (winnr("$") == 1 && &filetype == "defx") | q | endif
 
 "       -------------end of plugin vim settings--------------
 

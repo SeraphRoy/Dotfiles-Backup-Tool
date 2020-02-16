@@ -68,6 +68,10 @@ grepgo() {
    grep -n --include "*.go" --exclude "*test.go" --exclude-dir "test" --exclude-dir "mock" --exclude-dir "vendor" "$@"
 }
 
+grepa() {
+   grep -n --color=always --exclude-dir "build" "$@"
+}
+
 stress() {
    while $@; do :; done
 }
@@ -108,7 +112,8 @@ alias bb="brazil-build"
 alias bbs="brazil-build server"
 alias b="brazil"
 alias grep='grep -n --color=always'
-alias vi='vim'
+# alias vi='vim'
+alias vi='nvim'
 alias findp="ps aux | grep"
 alias ku="kubectl"
 
@@ -120,7 +125,7 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$HOME/.toolbox/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export LANG=en_US.UTF-8
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 case "$(uname -s)" in
 
@@ -175,9 +180,9 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 # --------------------- end of plugin settings ----------------------
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -199,3 +204,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Geneate RDE autocompletion.
+fpath=(~/.zsh/completion $fpath)
+autoload -Uz compinit && compinit -i
