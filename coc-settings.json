@@ -7,11 +7,16 @@
    "diagnostic.errorSign": "✗",
    "java.autobuild.enabled": false,
    "java.format.enabled": true,
-   "java.format.settings.url": "/Users/yanxiche/ADGDiscoveryCodeStyle.xml",
    "java.import.maven.enabled": true,
    "java.maven.downloadSources": true,
+   "java.completion.importOrder":[
+       "java",
+       "javax",
+       "org",
+       "com"
+   ],
    "java.configuration.updateBuildConfiguration": "automatic",
-   "java.jdt.ls.vmargs": "-javaagent:/Volumes/workplace/lombok.jar -Xbootclasspath/a:/Volumes/workplace/lombok.jar",
+   "java.jdt.ls.vmargs": "-javaagent:/Volumes/workplace/javaplugins/lombok.jar -Xbootclasspath/a:/Volumes/workplace/javaplugins/lombok.jar",
    "languageserver": {
       "golang": {
          "command": "go-langserver",
