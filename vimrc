@@ -21,6 +21,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'martinda/Jenkinsfile-vim-syntax'
 " Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+Plug 'airblade/vim-rooter'
 Plug 'tbabej/taskwiki'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'powerman/vim-plugin-AnsiEsc'
@@ -30,6 +31,7 @@ Plug 'godlygeek/tabular'
 Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
+Plug 'skywind3000/vim-terminal-help'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
@@ -70,6 +72,7 @@ Plug 'raimondi/delimitmate'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
+Plug 'ssh://git.amazon.com:2222/pkg/VimIon.git'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'bkad/camelcasemotion'
@@ -138,6 +141,8 @@ endif
 
 " line number on
 set number relativenumber
+autocmd BufEnter * set number relativenumber
+autocmd BufEnter term://* set nonumber norelativenumber
 
 " scrolling minimun lines
 set scrolloff=5
@@ -156,8 +161,8 @@ set ignorecase
 set smartcase
 
 " max length of code is 85
-set cc=140
-set tw=140
+set cc=150
+set tw=150
 autocmd FileType go :set cc=100 tw=100
 "match Error /\%86v.\+/
 
@@ -197,6 +202,7 @@ set shiftwidth=4
 set softtabstop=4
 " autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
 autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " backspace
 set backspace=indent,eol,start
@@ -379,10 +385,26 @@ if has('nvim')
     set inccommand=nosplit
 endif
 
-nnoremap <M-t> :tabnew<CR>
+nnoremap <M-t> :tabnew<CR>:term<CR>
+noremap <M-H> :tabm -1<CR>
+noremap <M-L> :tabm +1<CR>
 nnoremap <M-h> gT
 nnoremap <M-l> gt
+tnoremap <M-t> <c-\><c-n>:tabnew<CR>:term<CR>
+tnoremap <M-h> <c-\><c-n>gT
+tnoremap <M-l> <c-\><c-n>gt
+tnoremap <M-H> <c-\><c-n>:tabm -1<CR>:startinsert<CR>
+tnoremap <M-L> <c-\><c-n>:tabm +1<CR>:startinsert<CR>
+" DO NOT use the following maps because it will cause issues when we are in a vim within a ssh
+" tnoremap <esc> <c-\><c-n>
+" tnoremap jj <c-\><c-n>
 nnoremap <M-w> :tabclose<CR>
+inoremap <M-H> <esc>:tabm -1<CR>
+inoremap <M-L> <esc>:tabm +1<CR>
+inoremap <M-h> <esc>gT
+inoremap <M-l> <esc>gt
+
+autocmd BufEnter term://* startinsert
 
 "       ------------end of general vim settings-------------
 
@@ -396,6 +418,7 @@ let g:Lf_ShowRelativePath = 0
 let g:Lf_DefaultMode = 'FullPath'
 let g:Lf_HideHelp = 1
 nmap <M-p> :LeaderfFunction!<CR>
+nmap <Leader>p :Leaderf! mru<CR>
 map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
 vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
 map :Find :Leaderf! rg -e ''<left>
@@ -688,13 +711,16 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>ca <Plug>(coc-codeaction)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
 let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [v <Plug>(coc-diagnostic-prev)
+nmap <silent> ]v <Plug>(coc-diagnostic-next)
+nmap <silent> [c <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]c <Plug>(coc-diagnostic-next-error)
 " autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 function! s:show_documentation()
@@ -724,6 +750,8 @@ nmap <M-n> <Plug>MarkSearchCurrentPrev
 " vim-projectionist
 let g:projectionist_heuristics = {}
 let g:projectionist_heuristics["Config"] = {
+    \ "src/com/amazon/adg/submission/service/pipeline/tasks/*.java": {"alternate": "tst/com/amazon/adg/submission/service/pipeline/task/{}Test.java"},
+    \ "tst/com/amazon/adg/submission/service/pipeline/task/*Test.java": {"alternate": "src/com/amazon/adg/submission/service/pipeline/tasks/{}.java"},
     \ "src/com/amazon/*.java": {"alternate": "tst/com/amazon/{}Test.java"},
     \ "tst/com/amazon/*Test.java": {"alternate": "src/com/amazon/{}.java"},
 \ }
@@ -816,6 +844,13 @@ function! s:defx_my_settings() abort
   " \ defx#do_action('print')
 endfunction
 
+" terminal_help aka skywind3000/vim-terminal-help settings
+let g:terminal_cwd = 2
+
+" vim-rooter
+let g:rooter_patterns = ['Config', '.git/']
+let g:rooter_use_lcd = 1
+
 " Make cursor return back to main window
 " autocmd VimEnter,TabNewEntered * Defx | wincmd w
 " autocmd bufenter * if (winnr("$") == 1 && &filetype == "defx") | q | endif
@@ -837,7 +872,7 @@ if exists('g:gui_oni')
 
    " If using Oni's externalized statusline, hide vim's native statusline, 
    set noshowmode
-   set noruler
+set noruler
    set laststatus=0
    set noshowcmd
    " tabs
@@ -849,5 +884,12 @@ endif
 
 "       -------------end of platform-specific vim settings--------------
 
+"       ------------Amazon-specific vim settings-------------
+"
+if filereadable("/apollo/env/envImprovement/vim/plugin/LinkToCodeBrowser.vim")
+    source /apollo/env/envImprovement/vim/plugin/LinkToCodeBrowser.vim
+endif
+
+"       ------------end of Amazon-specific vim settings-------------
 
 "        ------------end of my customized settings---------------------

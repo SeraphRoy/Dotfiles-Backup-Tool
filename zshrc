@@ -105,7 +105,6 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_last
 
 alias lc="leetcode"
 
-export VISUAL=vim
 export ONI_NEOVIM_PATH=$(which nvim)
 export EDITOR=vim
 alias bb="brazil-build"
@@ -113,7 +112,16 @@ alias bbs="brazil-build server"
 alias b="brazil"
 alias grep='grep -n --color=always'
 # alias vi='vim'
-alias vi='nvim'
+export VISUAL=vim
+if hash drop 2>/dev/null
+then
+    alias vi='drop'
+    # export VISUAL=drop
+else
+    alias vi='nvim'
+    # export VISUAL=vim
+fi
+export EDITOR="$VISUAL"
 alias findp="ps aux | grep"
 alias ku="kubectl"
 
@@ -147,9 +155,6 @@ case "$(uname -s)" in
      ;;
 esac
 
-bindkey "^P" up-line-or-beginning-search
-bindkey "^N" down-line-or-beginning-search
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # ------------------ end of general zsh settings ----------------------
@@ -163,6 +168,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle git
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle skywind3000/z.lua
 # need to install nerd-fonts
@@ -204,6 +210,11 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 # Geneate RDE autocompletion.
 fpath=(~/.zsh/completion $fpath)
