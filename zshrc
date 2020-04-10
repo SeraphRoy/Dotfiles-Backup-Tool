@@ -33,45 +33,6 @@ fi
 
 # ------------------ custom functions ----------------------
 
-smux() {
-#   if [ "X$1" = "X" ]; then
-   if [ $# -eq 0 ]; then
-
-      echo "usage: `basename $0` <host> <port>"
-      return 1
-   fi
-
-   port=22
-   if [ -z "$2" ]; then
-      port=22
-   else
-      port=$2
-   fi
-
-   if [ "X$SSH_AUTH_SOCK" = "X" ]; then
-      eval `ssh-agent -s`
-      ssh-add $HOME/.ssh/id_rsa
-   fi
-
-   AUTOSSH_POLL=20 AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null) autossh -p $port -t $1 "tmux -CC -u attach"
-   #AUTOSSH_GATETIME=30
-   #AUTOSSH_LOGFILE=$HOST.log
-   #AUTOSSH_DEBUG=yes
-   #AUTOSSH_PATH=/usr/local/bin/ssh
-   # export AUTOSSH_POLL AUTOSSH_LOGFILE AUTOSSH_DEBUG AUTOSSH_PATH AUTOSSH_GATETIME AUTOSSH_PORT
-
-   # -t is the ssh option to force a pseudo terminal (pty)
-   # autossh -t $@ "tmux attach-session"
-}
-
-grepgo() {
-   grep -n --include "*.go" --exclude "*test.go" --exclude-dir "test" --exclude-dir "mock" --exclude-dir "vendor" "$@"
-}
-
-grepa() {
-   grep -n --color=always --exclude-dir "build" "$@"
-}
-
 stress() {
    while $@; do :; done
 }
@@ -141,7 +102,14 @@ case "$(uname -s)" in
      #echo 'Mac OS X'
      ;;
    Linux)
-     #echo 'Linux'
+    #echo 'Linux'
+    alias vim='/apollo/env/envImprovement/bin/vim'
+    alias register_with_aaa="/apollo/env/AAAWorkspaceSupport/bin/register_with_aaa.py"
+    alias bb="brazil-build"
+    alias bbs="brazil-build server"
+    alias b="brazil"
+    export PATH=/apollo/env/envImprovement/bin:$PATH
+    export JAVA_HOME=/usr/lib/jvm/amazon-openjdk-8
      ;;
    CYGWIN*|MINGW32*|MSYS*)
      #echo 'MS Windows'
