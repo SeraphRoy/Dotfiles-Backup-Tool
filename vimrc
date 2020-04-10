@@ -361,7 +361,7 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
 endif
 
 " Search for highlighted block
-map <Leader>fd gny:Find<C-R>"<CR>
+map <Leader>fd gny:Find<C-R>"<right>
 
 " Highlight matches without moving
 nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
