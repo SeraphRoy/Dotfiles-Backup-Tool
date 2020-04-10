@@ -80,6 +80,11 @@ then
     # export VISUAL=drop
 else
     alias vi='nvim'
+    if [ -x "$(which nvim)" ]; then
+        alias vi='nvim'
+    else
+        alias vi='vim'
+    fi
     # export VISUAL=vim
 fi
 export EDITOR="$VISUAL"
