@@ -122,7 +122,7 @@ case "$(uname -s)" in
     alias bb="brazil-build"
     alias bbs="brazil-build server"
     alias b="brazil"
-    export PATH=/apollo/env/envImprovement/bin:$PATH
+    export PATH=$PATH:/apollo/env/envImprovement/bin
     export JAVA_HOME=/usr/lib/jvm/amazon-openjdk-8
      ;;
    CYGWIN*|MINGW32*|MSYS*)
