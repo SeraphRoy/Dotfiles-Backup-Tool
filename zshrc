@@ -37,6 +37,14 @@ stress() {
    while $@; do :; done
 }
 
+gzip64() {
+    base64 --decode <<<$@ | gzip -cd
+}
+
+escape() {
+    python3 -c "import json; haha = input('Paste your string below:\n\n'); print('\n' + json.dumps(haha))"
+}
+
 # ------------------ end of custom functions----------------------
 
 
@@ -105,6 +113,7 @@ case "$(uname -s)" in
 
    Darwin)
      #echo 'Mac OS X'
+     alias wifi_restart="networksetup -setairportpower Wi-Fi off && networksetup -setairportpower Wi-Fi on"
      ;;
    Linux)
     #echo 'Linux'

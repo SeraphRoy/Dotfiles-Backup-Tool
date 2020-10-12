@@ -90,7 +90,7 @@ Plug 'szw/vim-maximizer'
 " Plug 'SeraphRoy/gutentags_plus.vim'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-signify'
 " Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
@@ -134,8 +134,11 @@ set background=dark
 let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
 
+" disable the “Press ENTER or type command to continue” prompt in Vim
+" https://stackoverflow.com/questions/890802/how-do-i-disable-the-press-enter-or-type-command-to-continue-prompt-in-vim
+set cmdheight=2
+
 if !has('nvim')
-    set cmdheight=2
     set shortmess=a
 endif
 
@@ -201,8 +204,8 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 " autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
-autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " backspace
 set backspace=indent,eol,start
@@ -360,9 +363,6 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
    runtime! macros/matchit.vim
 endif
 
-" Search for highlighted block
-map <Leader>fd gny:Find<C-R>"<right>
-
 " Highlight matches without moving
 nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
@@ -417,11 +417,13 @@ let g:Lf_CacheDirectory = expand('~/.vim/cache')
 let g:Lf_ShowRelativePath = 0
 let g:Lf_DefaultMode = 'FullPath'
 let g:Lf_HideHelp = 1
-nmap <M-p> :LeaderfFunction!<CR>
-nmap <Leader>p :Leaderf! mru<CR>
+nmap <M-p> :LeaderfFunction<CR>
+nmap <Leader>p :Leaderf rg -e ''
 map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
 vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
-map :Find :Leaderf! rg -e ''<left>
+map <Leader>fd gny:<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
 let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
 let g:Lf_NormalMap = {
          \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
@@ -713,14 +715,13 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>ca <Plug>(coc-codeaction)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
-let g:coc_snippet_next = '<TAB>'
-let g:coc_snippet_prev = '<S-TAB>'
 let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> [v <Plug>(coc-diagnostic-prev)
 nmap <silent> ]v <Plug>(coc-diagnostic-next)
 nmap <silent> [c <Plug>(coc-diagnostic-prev-error)
 nmap <silent> ]c <Plug>(coc-diagnostic-next-error)
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 function! s:show_documentation()
@@ -752,8 +753,8 @@ let g:projectionist_heuristics = {}
 let g:projectionist_heuristics["Config"] = {
     \ "src/com/amazon/adg/submission/service/pipeline/tasks/*.java": {"alternate": "tst/com/amazon/adg/submission/service/pipeline/task/{}Test.java"},
     \ "tst/com/amazon/adg/submission/service/pipeline/task/*Test.java": {"alternate": "src/com/amazon/adg/submission/service/pipeline/tasks/{}.java"},
-    \ "src/com/amazon/*.java": {"alternate": "tst/com/amazon/{}Test.java"},
-    \ "tst/com/amazon/*Test.java": {"alternate": "src/com/amazon/{}.java"},
+    \ "src/com/*.java": {"alternate": "tst/com/{}Test.java"},
+    \ "tst/com/*Test.java": {"alternate": "src/com/{}.java"},
 \ }
 
 " defx
@@ -849,7 +850,7 @@ let g:terminal_cwd = 2
 
 " vim-rooter
 let g:rooter_patterns = ['Config', '.git/']
-let g:rooter_use_lcd = 1
+let g:rooter_cd_cmd="lcd"
 
 " Make cursor return back to main window
 " autocmd VimEnter,TabNewEntered * Defx | wincmd w
