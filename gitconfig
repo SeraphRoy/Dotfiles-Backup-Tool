@@ -19,3 +19,7 @@
 [user]
 	name = Yanxi Chen
 	email = yanxiche@amazon.com
+[core]
+	excludesfile = /Users/yanxiche/.gitignore
+[pull]
+	rebase = false

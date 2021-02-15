@@ -22,27 +22,29 @@ Plug 'martinda/Jenkinsfile-vim-syntax'
 " Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'airblade/vim-rooter'
-Plug 'tbabej/taskwiki'
+" Plug 'tbabej/taskwiki'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'leafgarland/typescript-vim'
 Plug 'yggdroot/indentline'
 " Plug 'nathanaelkane/vim-indent-guides'
 Plug 'godlygeek/tabular'
 Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
-Plug 'skywind3000/vim-terminal-help'
+Plug 'SeraphRoy/vim-terminal-help'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
-Plug 'pangloss/vim-javascript'
+" Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
+Plug 'puremourning/vimspector'
 " Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 " Plug 'flazz/vim-colorschemes'
@@ -206,6 +208,10 @@ set softtabstop=4
 " autocmd FileType python :set expandtab tabstop=3 shiftwidth=3 softtabstop=3
 " autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 " autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType typescript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType javascript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " backspace
 set backspace=indent,eol,start
@@ -395,14 +401,27 @@ tnoremap <M-h> <c-\><c-n>gT
 tnoremap <M-l> <c-\><c-n>gt
 tnoremap <M-H> <c-\><c-n>:tabm -1<CR>:startinsert<CR>
 tnoremap <M-L> <c-\><c-n>:tabm +1<CR>:startinsert<CR>
+
+tnoremap <C-w>k <c-\><c-n><C-w>k
+tnoremap <C-w><C-k> <c-\><c-n><C-w>k
+tnoremap <C-w>l <c-\><c-n><C-w>l
+tnoremap <C-w><C-l> <c-\><c-n><C-w>l
+tnoremap <C-w>j <c-\><c-n><C-w>j
+tnoremap <C-w><C-j> <c-\><c-n><C-w>j
+tnoremap <C-w>h <c-\><c-n><C-w>h
+tnoremap <C-w><C-h> <c-\><c-n><C-w>h
+
 " DO NOT use the following maps because it will cause issues when we are in a vim within a ssh
-" tnoremap <esc> <c-\><c-n>
-" tnoremap jj <c-\><c-n>
+if has("macunix")
+    tnoremap <esc> <c-\><c-n>
+endif
 nnoremap <M-w> :tabclose<CR>
 inoremap <M-H> <esc>:tabm -1<CR>
 inoremap <M-L> <esc>:tabm +1<CR>
 inoremap <M-h> <esc>gT
 inoremap <M-l> <esc>gt
+
+vnoremap <S-y> "+y
 
 autocmd BufEnter term://* startinsert
 
@@ -435,7 +454,7 @@ let g:Lf_NormalMap = {
          \ }
 let g:Lf_WildIgnore = {
          \ 'dir': ['.svn','.git','.hg'],
-         \ 'file': ['*.sw?']
+         \ 'file': ['*.sw?', '*.class']
          \}
 
 " auto pair
@@ -740,6 +759,7 @@ let g:mkdp_preview_options = {
 
 " vim-maximizer
 map <Leader>m :MaximizerToggle<CR>
+tnoremap <Leader>m <c-\><c-n>:MaximizerToggle<CR>
 
 " vim-mark
 let g:mw_no_mappings = 1
@@ -847,6 +867,7 @@ endfunction
 
 " terminal_help aka skywind3000/vim-terminal-help settings
 let g:terminal_cwd = 2
+let g:terminal_key = '<C-\>' "
 
 " vim-rooter
 let g:rooter_patterns = ['Config', '.git/']
@@ -855,6 +876,19 @@ let g:rooter_cd_cmd="lcd"
 " Make cursor return back to main window
 " autocmd VimEnter,TabNewEntered * Defx | wincmd w
 " autocmd bufenter * if (winnr("$") == 1 && &filetype == "defx") | q | endif
+
+let g:vimspector_enable_mappings='HUMAN'
+
+function! JavaStartDebugCallback(err, port)
+  execute "cexpr! 'Java debug started on port: " . a:port . "'"
+  call vimspector#LaunchWithSettings({ "configuration": "Java Launch", "AdapterPort": a:port })
+endfunction
+
+function JavaStartDebug()
+  call CocActionAsync('runCommand', 'vscode.java.startDebugSession', function('JavaStartDebugCallback'))
+endfunction
+
+nmap <F1> :call JavaStartDebug()<CR>
 
 "       -------------end of plugin vim settings--------------
 

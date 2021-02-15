@@ -63,6 +63,10 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_DIR_SHOW_WRITABLE=true
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_last
 
+# oh-my-zsh
+# https://stackoverflow.com/questions/25614613/how-to-disable-zsh-substitution-autocomplete-with-url-and-backslashes
+DISABLE_MAGIC_FUNCTIONS=true
+
 # ------------------ end of plugin settings ----------------------
 
 
@@ -75,17 +79,18 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_last
 alias lc="leetcode"
 
 export ONI_NEOVIM_PATH=$(which nvim)
-export EDITOR=vim
+export EDITOR=vi
 alias bb="brazil-build"
 alias bbs="brazil-build server"
 alias b="brazil"
 alias grep='grep -n --color=always'
-# alias vi='vim'
-export VISUAL=vim
+alias grepjs='grep -n --color=always --exclude-dir node_modules --exclude-dir build --exclude package-lock.json'
+alias brb="brazil-recursive-cmd --allPackages brazil-build"
+export VISUAL=vi
 if hash drop 2>/dev/null
 then
     alias vi='drop'
-    # export VISUAL=drop
+    export VISUAL='drop'
 else
     alias vi='nvim'
     if [ -x "$(which nvim)" ]; then
@@ -95,6 +100,7 @@ else
     fi
     # export VISUAL=vim
 fi
+# alias vi='vim'
 export EDITOR="$VISUAL"
 alias findp="ps aux | grep"
 alias ku="kubectl"
@@ -120,7 +126,7 @@ case "$(uname -s)" in
     alias vim='/apollo/env/envImprovement/bin/vim'
     alias register_with_aaa="/apollo/env/AAAWorkspaceSupport/bin/register_with_aaa.py"
     alias bb="brazil-build"
-    alias bbs="brazil-build server"
+    alias bbs="brazil-juild server"
     alias b="brazil"
     export PATH=$PATH:/apollo/env/envImprovement/bin
     export JAVA_HOME=/usr/lib/jvm/amazon-openjdk-8
@@ -153,6 +159,7 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle skywind3000/z.lua
+antigen bundle Tarrasch/zsh-autoenv
 # need to install nerd-fonts
 # antigen theme bhilburn/powerlevel9k powerlevel9k
 antigen theme romkatv/powerlevel10k
@@ -200,4 +207,30 @@ bindkey -M vicmd 'j' history-substring-search-down
 
 # Geneate RDE autocompletion.
 fpath=(~/.zsh/completion $fpath)
-autoload -Uz compinit && compinit -i
+# autoload -Uz compinit && compinit -i
+
+
+# Lazy loading nvm
+declare -a NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
+
+NODE_GLOBALS+=("node")
+NODE_GLOBALS+=("nvm")
+
+load_nvm () {
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+}
+
+for cmd in "${NODE_GLOBALS[@]}"; do
+    eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
+done
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
