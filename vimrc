@@ -19,7 +19,8 @@ Plug 'lervag/vimtex'
 Plug   'KeitaNakamura/tex-conceal.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'martinda/Jenkinsfile-vim-syntax'
-" Plug 'honza/vim-snippets'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'airblade/vim-rooter'
 " Plug 'tbabej/taskwiki'
@@ -212,6 +213,7 @@ autocmd FileType typescript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType javascript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType java :set expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " backspace
 set backspace=indent,eol,start
@@ -391,16 +393,16 @@ if has('nvim')
     set inccommand=nosplit
 endif
 
-nnoremap <M-t> :tabnew<CR>:term<CR>
-noremap <M-H> :tabm -1<CR>
-noremap <M-L> :tabm +1<CR>
-nnoremap <M-h> gT
-nnoremap <M-l> gt
-tnoremap <M-t> <c-\><c-n>:tabnew<CR>:term<CR>
-tnoremap <M-h> <c-\><c-n>gT
-tnoremap <M-l> <c-\><c-n>gt
-tnoremap <M-H> <c-\><c-n>:tabm -1<CR>:startinsert<CR>
-tnoremap <M-L> <c-\><c-n>:tabm +1<CR>:startinsert<CR>
+" nnoremap <M-t> :tabnew<CR>:term<CR>
+" noremap <M-H> :tabm -1<CR>
+" noremap <M-L> :tabm +1<CR>
+" nnoremap <M-h> gT
+" nnoremap <M-l> gt
+" tnoremap <M-t> <c-\><c-n>:tabnew<CR>:term<CR>
+" tnoremap <M-h> <c-\><c-n>gT
+" tnoremap <M-l> <c-\><c-n>gt
+" tnoremap <M-H> <c-\><c-n>:tabm -1<CR>:startinsert<CR>
+" tnoremap <M-L> <c-\><c-n>:tabm +1<CR>:startinsert<CR>
 
 tnoremap <C-w>k <c-\><c-n><C-w>k
 tnoremap <C-w><C-k> <c-\><c-n><C-w>k
@@ -424,6 +426,9 @@ inoremap <M-l> <esc>gt
 vnoremap <S-y> "+y
 
 autocmd BufEnter term://* startinsert
+
+" Automatically removing all trailing whitespace
+autocmd FileType c,cpp,java autocmd BufWritePre <buffer> %s/\s\+$//e
 
 "       ------------end of general vim settings-------------
 
@@ -453,7 +458,7 @@ let g:Lf_NormalMap = {
          \ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
          \ }
 let g:Lf_WildIgnore = {
-         \ 'dir': ['.svn','.git','.hg'],
+         \ 'dir': ['.svn','.git','.hg', '.idea', '.bemol'],
          \ 'file': ['*.sw?', '*.class']
          \}
 
@@ -715,16 +720,35 @@ let g:LanguageClient_serverCommands = {
 " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 
 " coc-nvim
-" use <tab> for trigger completion and navigate next complete item
-function! s:check_back_space() abort
-   let col = col('.') - 1
-   return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-         \ pumvisible() ? "\<C-n>" :
-         \ <SID>check_back_space() ? "\<TAB>" :
-         \ coc#refresh()
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> <C-w>] :sp<CR><Plug>(coc-definition)
@@ -742,13 +766,17 @@ nmap <silent> [c <Plug>(coc-diagnostic-prev-error)
 nmap <silent> ]c <Plug>(coc-diagnostic-next-error)
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 function! s:show_documentation()
-   if &filetype == 'vim'
-      execute 'h '.expand('<cword>')
-   else
-      call CocAction('doHover')
-   endif
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
 endfunction
 
 " markdown-preview-nvim
@@ -775,6 +803,8 @@ let g:projectionist_heuristics["Config"] = {
     \ "tst/com/amazon/adg/submission/service/pipeline/task/*Test.java": {"alternate": "src/com/amazon/adg/submission/service/pipeline/tasks/{}.java"},
     \ "src/com/*.java": {"alternate": "tst/com/{}Test.java"},
     \ "tst/com/*Test.java": {"alternate": "src/com/{}.java"},
+    \ "lib/*.ts": {"alternate": "tst/{}.test.ts"},
+    \ "tst/*.test.ts": {"alternate": "lib/{}.ts"},
 \ }
 
 " defx
@@ -878,17 +908,28 @@ let g:rooter_cd_cmd="lcd"
 " autocmd bufenter * if (winnr("$") == 1 && &filetype == "defx") | q | endif
 
 let g:vimspector_enable_mappings='HUMAN'
+let $VIMSPECTOR_PROJECT_NAME = fnamemodify(getcwd(), ':t')
 
-function! JavaStartDebugCallback(err, port)
-  execute "cexpr! 'Java debug started on port: " . a:port . "'"
-  call vimspector#LaunchWithSettings({ "configuration": "Java Launch", "AdapterPort": a:port })
+" Snipmate
+let g:snipMate = { 'snippet_version' : 1 }
+
+" bemol
+au FileType java call SetWorkspaceFolders()
+
+function! SetWorkspaceFolders() abort
+    " Only set g:WorkspaceFolders if it is not already set
+    if exists("g:WorkspaceFolders") | return | endif
+
+    if executable("findup")
+        let l:ws_dir = system("cd '" . expand("%:h") . "' && findup packageInfo")
+        " Bemol conveniently generates a '$WS_DIR/.bemol/ws_root_folders' file, so let's leverage it
+        let l:folders_file = l:ws_dir . "/.bemol/ws_root_folders"
+        if filereadable(l:folders_file)
+            let l:ws_folders = readfile(l:folders_file)
+            let g:WorkspaceFolders = filter(l:ws_folders, "isdirectory(v:val)")
+        endif
+    endif
 endfunction
-
-function JavaStartDebug()
-  call CocActionAsync('runCommand', 'vscode.java.startDebugSession', function('JavaStartDebugCallback'))
-endfunction
-
-nmap <F1> :call JavaStartDebug()<CR>
 
 "       -------------end of plugin vim settings--------------
 

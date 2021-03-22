@@ -2,7 +2,6 @@
 
 # Antigen: https://github.com/zsh-users/antigen
 ANTIGEN="$HOME/.antigen.zsh"
-
 # Install antigen.zsh if not exist
 if [ ! -f "$ANTIGEN" ]; then
 	echo "Installing antigen ..."
@@ -118,8 +117,8 @@ export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 case "$(uname -s)" in
 
    Darwin)
-     #echo 'Mac OS X'
-     alias wifi_restart="networksetup -setairportpower Wi-Fi off && networksetup -setairportpower Wi-Fi on"
+    #echo 'Mac OS X'
+    alias wifi_restart="networksetup -setairportpower Wi-Fi off && networksetup -setairportpower Wi-Fi on"
      ;;
    Linux)
     #echo 'Linux'
