@@ -56,7 +56,7 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%H:%M \uf073 %m/%d/%y}"
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='black'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir rbenv vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir rbenv)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs time)
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_DIR_SHOW_WRITABLE=true
@@ -74,6 +74,10 @@ DISABLE_MAGIC_FUNCTIONS=true
 # # same effect as 'screen -R'
 # tmuxr="( ( tmux ls | grep -v attached ) && tmux a ) || tmux new"
 # tmuxr="tmux ls | grep -v attached | head -1 | cut -f2 -d: | xargs tmux attach -t || tmux new"
+moshtmux() {
+    # mosh $1 -- sh -c "tmux -CC ls | grep -vq attached && tmux -CC a || tmux -CC new"
+    mosh $1 -- sh -c "tmux -CC"
+}
 
 alias lc="leetcode"
 
@@ -85,7 +89,9 @@ alias b="brazil"
 alias grep='grep -n --color=always'
 alias grepjs='grep -n --color=always --exclude-dir node_modules --exclude-dir build --exclude package-lock.json'
 alias brb="brazil-recursive-cmd --allPackages brazil-build"
-export VISUAL=vi
+alias python="python3"
+alias pip="pip3"
+export VISUAL=nvim
 if hash drop 2>/dev/null
 then
     alias vi='drop'
@@ -111,14 +117,17 @@ export GOPATH="$HOME/go"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$HOME/.toolbox/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.cargo/env:$PATH
 export LANG=en_US.UTF-8
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export JAVA_HOME=`/usr/libexec/java_home`
+export PATH=$JAVA_HOME/bin:$PATH
 
 case "$(uname -s)" in
 
    Darwin)
     #echo 'Mac OS X'
     alias wifi_restart="networksetup -setairportpower Wi-Fi off && networksetup -setairportpower Wi-Fi on"
+    export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
      ;;
    Linux)
     #echo 'Linux'
@@ -233,3 +242,7 @@ for dump in ~/.zcompdump(N.mh+24); do
   compinit
 done
 compinit -C
+
+
+
+export PATH="/Users/yanxiche/Fortify/bin:$PATH"

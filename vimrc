@@ -13,47 +13,60 @@ endif
 " vim-plug begin
 call plug#begin('~/.vim/bundle')
 
-Plug 'octol/vim-cpp-enhanced-highlight'
-" Plug 'vim-latex/vim-latex'
-Plug 'lervag/vimtex'
-Plug   'KeitaNakamura/tex-conceal.vim'
-Plug 'rust-lang/rust.vim'
-Plug 'martinda/Jenkinsfile-vim-syntax'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'honza/vim-snippets'
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
-Plug 'airblade/vim-rooter'
+" Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'jdhao/better-escape.vim'
+Plug 'dstein64/vim-startuptime'
+Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'KeitaNakamura/tex-conceal.vim', { 'for': 'tex' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug '~/brazil-config/'
+Plug 'martinda/Jenkinsfile-vim-syntax', { 'for': 'Jenkinsfile' }
+" Plug 'MarcWeber/vim-addon-mw-utils'
+" Plug 'honza/vim-snippets'
+" Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+" Plug 'airblade/vim-rooter'
 " Plug 'tbabej/taskwiki'
-Plug 'reasonml-editor/vim-reason-plus'
+" Plug 'reasonml-editor/vim-reason-plus'
 Plug 'powerman/vim-plugin-AnsiEsc'
-Plug 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'javascript'] }
 Plug 'yggdroot/indentline'
 " Plug 'nathanaelkane/vim-indent-guides'
 Plug 'godlygeek/tabular'
-Plug 'idris-hackers/idris-vim'
+" Plug 'idris-hackers/idris-vim'
 Plug 'Shougo/echodoc.vim'
 Plug 'romainl/vim-qf'
 Plug 'SeraphRoy/vim-terminal-help'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'Shougo/denite.nvim'
-Plug 'gabrielelana/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
+" Plug 'Shougo/denite.nvim'
+Plug 'gabrielelana/vim-markdown', { 'for': ['markdown', 'javascript'] }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'for': ['markdown', 'javascript']  }
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-notes'
 " Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
 Plug 'sickill/vim-pasta'
 Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
-Plug 'puremourning/vimspector'
+" Plug 'puremourning/vimspector'
 " Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 " Plug 'flazz/vim-colorschemes'
-Plug 'gruvbox-community/gruvbox'
+" Plug 'gruvbox-community/gruvbox'
+" Plug 'rktjmp/lush.nvim'
+" Plug 'npxbr/gruvbox.nvim'
+Plug 'sainnhe/gruvbox-material'
+Plug 'rakr/vim-one'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'glepnir/lspsaga.nvim'
+" Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+Plug 'vim-test/vim-test', { 'on': ['UltestNearest', 'Ultest']}
+" Plug 'rafamadriz/neon'
+Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins', 'on': ['UltestNearest', 'Ultest']}
 " Plug 'xuhdev/vim-latex-live-preview'
 " Plug 'vim-airline/vim-airline-themes'
-Plug 'oplatek/conque-shell'
-Plug 'wellle/targets.vim'
+" Plug 'oplatek/conque-shell'
+" Plug 'wellle/targets.vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 " Plug 'autozimu/LanguageClient-neovim', {
@@ -61,32 +74,38 @@ Plug 'tpope/vim-repeat'
 "     \ 'do': 'bash install.sh',
 "     \ }
 if has('nvim')
-  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'kristijanhusak/defx-git'
-Plug 'kristijanhusak/defx-icons'
+  " Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'kristijanhusak/defx-git'
+  " Plug 'kristijanhusak/defx-icons'
 else
-  Plug 'Shougo/defx.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+  " Plug 'Shougo/defx.nvim'
+  " Plug 'roxma/nvim-yarp'
+  " Plug 'roxma/vim-hug-neovim-rpc'
 endif
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'raimondi/delimitmate'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'ConradIrwin/vim-bracketed-paste'
+" Plug 'skywind3000/asyncrun.vim'
+" Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'easymotion/vim-easymotion'
-Plug 'ssh://git.amazon.com:2222/pkg/VimIon.git'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
+" Plug 'ssh://git.amazon.com:2222/pkg/VimIon.git'
+Plug 'ssh://git.amazon.com:2222/pkg/Scat-nvim'
+" Plug 'tpope/vim-eunuch'
+" Plug 'tpope/vim-fugitive'
 Plug 'bkad/camelcasemotion'
 Plug 'tpope/vim-projectionist'
-Plug 'inkarkat/vim-ingo-library'
+" Plug 'inkarkat/vim-ingo-library'
 " vim-mark depends on vim-ingo-library
-Plug 'inkarkat/vim-mark'
-Plug 'skywind3000/vim-preview'
-Plug 'terryma/vim-expand-region'
+" Plug 'inkarkat/vim-mark'
+" Plug 'skywind3000/vim-preview'
+" Plug 'terryma/vim-expand-region'
 " Plug 'python-mode/python-mode', { 'branch': 'develop' }
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+" Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'szw/vim-maximizer'
 " Plug 'neomake/neomake'
 " Plug 'ludovicchabant/vim-gutentags'
@@ -94,6 +113,28 @@ Plug 'szw/vim-maximizer'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+" Plug 'williamboman/nvim-lsp-installer'
+" " current function/lsp status
+" Plug 'nvim-lua/lsp-status.nvim'
+" " icons
+" Plug 'onsails/lspkind-nvim'
+" " signature help for functions lsp
+" Plug 'ray-x/lsp_signature.nvim'
+" 
+" Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+" Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+" Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
+" " java lsp client
+" Plug 'mfussenegger/nvim-jdtls'
+
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'kabouzeid/nvim-lspinstall'
+" Plug 'hrsh7th/nvim-compe'
+" Plug 'mfussenegger/nvim-jdtls'
 Plug 'mhinz/vim-signify'
 " Plugin 'airblade/vim-gitgutter'
 " Plugin 'roxma/vim-paste-easy'
@@ -129,13 +170,24 @@ syntax on
 
 " 256 color
 set termguicolors
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 " let &t_Co=256
 
 " color scheme/theme
 syntax enable
 set background=dark
 let g:gruvbox_contrast_dark = 'soft'
-colorscheme gruvbox
+let g:gruvbox_material_diagnostic_line_highlight = 1
+let g:gruvbox_material_transparent_background = 0
+let g:gruvbox_material_menu_selection_background = 'grey'
+let g:gruvbox_material_visual = 'reverse'
+let g:gruvbox_material_diagnostic_line_highlight = 0
+let g:gruvbox_material_diagnostic_virtual_text = 'colored'
+let g:gruvbox_material_better_performance = 1
+let g:gruvbox_material_enable_italic = 1
+let g:gruvbox_material_current_word = 'bold'
+hi Search cterm=NONE ctermfg=grey ctermbg=blue
+colorscheme one
 
 " disable the “Press ENTER or type command to continue” prompt in Vim
 " https://stackoverflow.com/questions/890802/how-do-i-disable-the-press-enter-or-type-command-to-continue-prompt-in-vim
@@ -144,6 +196,8 @@ set cmdheight=2
 if !has('nvim')
     set shortmess=a
 endif
+
+set mouse=
 
 " line number on
 set number relativenumber
@@ -187,8 +241,8 @@ autocmd BufWritePost $MYVIMRC source $MYVIMRC
 nmap oo :normal o<CR>k
 nmap OO :normal O<CR>
 
-"map esc to jj
-imap jj <Esc>
+"map esc to jj use better-escape now
+" imap jj <Esc>
 
 " set to auto read when a file is changed from the outside
 set autoread
@@ -212,6 +266,8 @@ set softtabstop=4
 autocmd FileType typescript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType javascript :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType yaml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType xml :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType groovy :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType json :set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType java :set expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
@@ -338,6 +394,7 @@ nmap :term<CR> :term<CR><C-w>J
 
 " set auto-completion option
 set completeopt-=preview
+" set completeopt=menuone,noselect
 " set completeopt=noselect,noinsert,menuone
 
 " shift blocks in insert mode
@@ -366,10 +423,10 @@ endif
 " Delete comment character when joining commented lines
 set formatoptions+=jtl
 
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-   runtime! macros/matchit.vim
-endif
+" " Load matchit.vim, but only if the user hasn't installed a newer version.
+" if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+"    runtime! macros/matchit.vim
+" endif
 
 " Highlight matches without moving
 nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
@@ -428,39 +485,74 @@ vnoremap <S-y> "+y
 autocmd BufEnter term://* startinsert
 
 " Automatically removing all trailing whitespace
-autocmd FileType c,cpp,java autocmd BufWritePre <buffer> %s/\s\+$//e
+" autocmd FileType c,cpp,java autocmd BufWritePre <buffer> %s/\s\+$//e
 
 "       ------------end of general vim settings-------------
 
 "       -------------plugin vim settings--------------------
 
+" better-escape
+let g:better_escape_shortcut = 'jj'
+let g:better_escape_interval = 300
+
+" treesitter settings
+
+" telescope.nvim settings
+nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <Leader>p <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <Leader>fd <cmd>lua require('telescope.builtin').grep_string()<cr>
+highlight default link TelescopePreviewLine Search
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+    extensions = {
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+        }
+    },
+    defaults = {
+        file_sorter = require'telescope.sorters'.get_fzy_sorter,
+    path_display={"smart"},
+        mappings = {
+            i = {
+                ["<C-j>"] = actions.move_selection_next,
+                ["<C-k>"] = actions.move_selection_previous,
+                ["<esc>"] = actions.close
+            },
+        }
+    }
+}
+require('telescope').load_extension('fzy_native')
+EOF
+
 " LeaderF settings
-let g:Lf_ShortcutF = '<C-P>'
-let g:Lf_WindowHeight = 0.13
-let g:Lf_CacheDirectory = expand('~/.vim/cache')
-let g:Lf_ShowRelativePath = 0
-let g:Lf_DefaultMode = 'FullPath'
-let g:Lf_HideHelp = 1
-nmap <M-p> :LeaderfFunction<CR>
-nmap <Leader>p :Leaderf rg -e ''
-map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
-vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
-map <Leader>fd gny:<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
-let g:Lf_NormalMap = {
-         \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
-         \ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
-         \ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
-         \ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
-         \ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
-         \ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
-         \ }
-let g:Lf_WildIgnore = {
-         \ 'dir': ['.svn','.git','.hg', '.idea', '.bemol'],
-         \ 'file': ['*.sw?', '*.class']
-         \}
+" let g:Lf_ShortcutF = '<C-P>'
+" let g:Lf_WindowHeight = 0.13
+" let g:Lf_CacheDirectory = expand('~/.vim/cache')
+" let g:Lf_ShowRelativePath = 0
+" let g:Lf_DefaultMode = 'FullPath'
+" let g:Lf_HideHelp = 1
+" nmap <M-p> :LeaderfFunction<CR>
+" nmap <Leader>p :Leaderf rg -e ''
+" map <Leader>s <Plug>LeaderfRgBangCwordLiteralBoundary<CR>
+" vmap <Leader>s <Plug>LeaderfRgBangVisualLiteralBoundary<CR>
+" map <Leader>fd gny:<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+" let g:Lf_WindowPosition = 'popup'
+" let g:Lf_PreviewInPopup = 1
+" let g:Lf_PreviewResult = {'Function':0, 'Colorscheme':1}
+" let g:Lf_NormalMap = {
+"          \ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
+"          \ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
+"          \ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
+"          \ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
+"          \ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
+"          \ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
+"          \ }
+" let g:Lf_WildIgnore = {
+"          \ 'dir': ['.svn','.git','.hg', '.idea', '.bemol'],
+"          \ 'file': ['*.sw?', '*.class']
+"      \}
 
 " auto pair
 let g:AutoPairsShortcutToggle = ''
@@ -479,7 +571,7 @@ endfunction
 
 " lightline.vim
 let g:lightline = {
-         \ 'colorscheme': 'gruvbox',
+         \ 'colorscheme': 'one',
      \ 'active': {
          \   'left': [ [ 'mode', 'paste' ],
          \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
@@ -733,18 +825,21 @@ if has("patch-8.1.1564")
 else
   set signcolumn=yes
 endif
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <silent><expr> <cr> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm() : "\<C-g>u\<CR>"
+" inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+" remap for complete to use tab and <cr>
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    \ coc#pum#visible() ? coc#pum#next(1):
+    \ <SID>check_back_space() ? "\<Tab>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
+inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
+inoremap <silent><expr> <c-space> coc#refresh()
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -757,7 +852,6 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>ca <Plug>(coc-codeaction)
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 let g:coc_auto_copen = 0
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> [v <Plug>(coc-diagnostic-prev)
@@ -808,92 +902,92 @@ let g:projectionist_heuristics["Config"] = {
 \ }
 
 " defx
-call defx#custom#option('_', {
-      \ 'winwidth': 70,
-      \ 'split': 'vertical',
-      \ 'direction': 'botright',
-      \ 'show_ignored_files': 0,
-      \ 'buffer_name': '',
-      \ 'toggle': 1,
-      \ 'resume': 1,
-      \ 'columns': 'git:mark:indent:icons:filename:type',
-  \ })
-
-autocmd FileType defx call s:defx_my_settings()
-function! s:defx_my_settings() abort
-  " Define mappings
-  " nnoremap <silent><buffer><expr> <CR> 
-  " \ defx#do_action('drop')
-  nnoremap <silent><buffer><expr> <CR>
-  \ defx#is_directory() ?
-  \ defx#do_action('open_or_close_tree') :
-  \ defx#do_action('drop')
-  nnoremap <silent><buffer><expr> <M-CR>
-  \ defx#do_action('open_tree_recursive')
-  " nnoremap <silent><buffer><expr> l
-  " \ defx#do_action('open_tree')
-  " nnoremap <silent><buffer><expr> <S-l>
-  " \ defx#do_action('open_tree_recursive')
-  nnoremap <silent><buffer><expr> h
-  \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> <C-l>
-  \ defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> > defx#do_action('resize',
-  \ defx#get_context().winwidth - 10)
-  nnoremap <silent><buffer><expr> < defx#do_action('resize',
-  \ defx#get_context().winwidth + 10)
-  nnoremap <silent><buffer><expr> cd
-  \ defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> d
-  \ defx#do_action('remove')
-  " nnoremap <silent><buffer><expr> c
-  " \ defx#do_action('copy')
-  " nnoremap <silent><buffer><expr> m
-  " \ defx#do_action('move')
-" nnoremap <silent><buffer><expr> p
-  " \ defx#do_action('paste')
-  " nnoremap <silent><buffer><expr> E
-  " \ defx#do_action('open', 'vsplit')
-  " nnoremap <silent><buffer><expr> P
-  " \ defx#do_action('open', 'pedit')
-  " nnoremap <silent><buffer><expr> K
-  " \ defx#do_action('new_directory')
-  " nnoremap <silent><buffer><expr> N
-  " \ defx#do_action('new_file')
-  " nnoremap <silent><buffer><expr> M
-  " \ defx#do_action('new_multiple_files')
-  " nnoremap <silent><buffer><expr> C
-  " \ defx#do_action('toggle_columns',
-  " \                'mark:indent:icon:filename:type:size:time')
-  " nnoremap <silent><buffer><expr> S
-  " \ defx#do_action('toggle_sort', 'time')
-  " nnoremap <silent><buffer><expr> r
-  " \ defx#do_action('rename')
-  " nnoremap <silent><buffer><expr> !
-  " \ defx#do_action('execute_command')
-  " nnoremap <silent><buffer><expr> x
-  " \ defx#do_action('execute_system')
-  " nnoremap <silent><buffer><expr> yy
-  " \ defx#do_action('yank_path')
-  " nnoremap <silent><buffer><expr> .
-  " \ defx#do_action('toggle_ignored_files')
-  " nnoremap <silent><buffer><expr> ;
-  " \ defx#do_action('repeat')
-  " nnoremap <silent><buffer><expr> ~
-  " \ defx#do_action('cd')
-  " nnoremap <silent><buffer><expr> q
-  " \ defx#do_action('quit')
-  " nnoremap <silent><buffer><expr> <Space>
-  " \ defx#do_action('toggle_select') . 'j'
-  " nnoremap <silent><buffer><expr> *
-  " \ defx#do_action('toggle_select_all')
-  " nnoremap <silent><buffer><expr> j
-  " \ line('.') == line('$') ? 'gg' : 'j'
-  " nnoremap <silent><buffer><expr> k
-  " \ line('.') == 1 ? 'G' : 'k'
-  " nnoremap <silent><buffer><expr> <C-g>
-  " \ defx#do_action('print')
-endfunction
+" call defx#custom#option('_', {
+"       \ 'winwidth': 70,
+"       \ 'split': 'vertical',
+"       \ 'direction': 'botright',
+"       \ 'show_ignored_files': 0,
+"       \ 'buffer_name': '',
+"       \ 'toggle': 1,
+"       \ 'resume': 1,
+"       \ 'columns': 'git:mark:indent:icons:filename:type',
+"   \ })
+" 
+" autocmd FileType defx call s:defx_my_settings()
+" function! s:defx_my_settings() abort
+"   " Define mappings
+"   " nnoremap <silent><buffer><expr> <CR> 
+"   " \ defx#do_action('drop')
+"   nnoremap <silent><buffer><expr> <CR>
+"   \ defx#is_directory() ?
+"   \ defx#do_action('open_or_close_tree') :
+"   \ defx#do_action('drop')
+"   nnoremap <silent><buffer><expr> <M-CR>
+"   \ defx#do_action('open_tree_recursive')
+"   " nnoremap <silent><buffer><expr> l
+"   " \ defx#do_action('open_tree')
+"   " nnoremap <silent><buffer><expr> <S-l>
+"   " \ defx#do_action('open_tree_recursive')
+"   nnoremap <silent><buffer><expr> h
+"   \ defx#do_action('cd', ['..'])
+"   nnoremap <silent><buffer><expr> <C-l>
+"   \ defx#do_action('redraw')
+"   nnoremap <silent><buffer><expr> > defx#do_action('resize',
+"   \ defx#get_context().winwidth - 10)
+"   nnoremap <silent><buffer><expr> < defx#do_action('resize',
+"   \ defx#get_context().winwidth + 10)
+"   nnoremap <silent><buffer><expr> cd
+"   \ defx#do_action('change_vim_cwd')
+"   nnoremap <silent><buffer><expr> d
+"   \ defx#do_action('remove')
+"   " nnoremap <silent><buffer><expr> c
+"   " \ defx#do_action('copy')
+"   " nnoremap <silent><buffer><expr> m
+"   " \ defx#do_action('move')
+" " nnoremap <silent><buffer><expr> p
+"   " \ defx#do_action('paste')
+"   " nnoremap <silent><buffer><expr> E
+"   " \ defx#do_action('open', 'vsplit')
+"   " nnoremap <silent><buffer><expr> P
+"   " \ defx#do_action('open', 'pedit')
+"   " nnoremap <silent><buffer><expr> K
+"   " \ defx#do_action('new_directory')
+"   " nnoremap <silent><buffer><expr> N
+"   " \ defx#do_action('new_file')
+"   " nnoremap <silent><buffer><expr> M
+"   " \ defx#do_action('new_multiple_files')
+"   " nnoremap <silent><buffer><expr> C
+"   " \ defx#do_action('toggle_columns',
+"   " \                'mark:indent:icon:filename:type:size:time')
+"   " nnoremap <silent><buffer><expr> S
+"   " \ defx#do_action('toggle_sort', 'time')
+"   " nnoremap <silent><buffer><expr> r
+"   " \ defx#do_action('rename')
+"   " nnoremap <silent><buffer><expr> !
+"   " \ defx#do_action('execute_command')
+"   " nnoremap <silent><buffer><expr> x
+"   " \ defx#do_action('execute_system')
+"   " nnoremap <silent><buffer><expr> yy
+"   " \ defx#do_action('yank_path')
+"   " nnoremap <silent><buffer><expr> .
+"   " \ defx#do_action('toggle_ignored_files')
+"   " nnoremap <silent><buffer><expr> ;
+"   " \ defx#do_action('repeat')
+"   " nnoremap <silent><buffer><expr> ~
+"   " \ defx#do_action('cd')
+"   " nnoremap <silent><buffer><expr> q
+"   " \ defx#do_action('quit')
+"   " nnoremap <silent><buffer><expr> <Space>
+"   " \ defx#do_action('toggle_select') . 'j'
+"   " nnoremap <silent><buffer><expr> *
+"   " \ defx#do_action('toggle_select_all')
+"   " nnoremap <silent><buffer><expr> j
+"   " \ line('.') == line('$') ? 'gg' : 'j'
+"   " nnoremap <silent><buffer><expr> k
+"   " \ line('.') == 1 ? 'G' : 'k'
+"   " nnoremap <silent><buffer><expr> <C-g>
+"   " \ defx#do_action('print')
+" endfunction
 
 " terminal_help aka skywind3000/vim-terminal-help settings
 let g:terminal_cwd = 2
@@ -918,22 +1012,34 @@ au FileType java call SetWorkspaceFolders()
 
 function! SetWorkspaceFolders() abort
     " Only set g:WorkspaceFolders if it is not already set
-    if exists("g:WorkspaceFolders") | return | endif
+    " if exists("g:WorkspaceFolders") | return | endif
 
     if executable("findup")
-        let l:ws_dir = system("cd '" . expand("%:h") . "' && findup packageInfo")
+        let l:ws_dir = trim(system("cd '" . expand("%:h") . "' && findup packageInfo"))
         " Bemol conveniently generates a '$WS_DIR/.bemol/ws_root_folders' file, so let's leverage it
         let l:folders_file = l:ws_dir . "/.bemol/ws_root_folders"
         if filereadable(l:folders_file)
-            let l:ws_folders = readfile(l:folders_file)
-            let g:WorkspaceFolders = filter(l:ws_folders, "isdirectory(v:val)")
+            " echo readfile(l:folders_file)
+            " let l:ws_folders = readfile(l:folders_file)
+            " let g:WorkspaceFolders = filter(l:ws_folders, "isdirectory(v:val)")
+            let g:WorkspaceFolders = readfile(l:folders_file)
         endif
+        set sessionoptions+=globals
     endif
 endfunction
+
+" Ultest
+nmap ]t <Plug>(ultest-next-fail)
+nmap [t <Plug>(ultest-prev-fail)
+
 
 "       -------------end of plugin vim settings--------------
 
 "       ------------platform-specific vim settings-------------
+
+" vim-test
+let test#custom_runners = {'Java': ['Braziltest']}
+let test#java#runner = 'gradletest'
 
 if exists('g:gui_oni')
    set nocompatible              " be iMproved, required
