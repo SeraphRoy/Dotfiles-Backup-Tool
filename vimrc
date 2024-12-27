@@ -16,7 +16,7 @@ call plug#begin('~/.vim/bundle')
 " Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'jdhao/better-escape.vim'
 Plug 'dstein64/vim-startuptime'
-Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+" Plug 'vim-latex/vim-latex', { 'for': 'tex' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'KeitaNakamura/tex-conceal.vim', { 'for': 'tex' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
@@ -40,7 +40,7 @@ Plug 'SeraphRoy/vim-terminal-help'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'Shougo/denite.nvim'
 Plug 'gabrielelana/vim-markdown', { 'for': ['markdown', 'javascript'] }
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'for': ['markdown', 'javascript']  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-notes'
 " Plug 'pangloss/vim-javascript'
@@ -625,6 +625,7 @@ let g:Imap_UsePlaceHolders = 0
 
 " vimtex settings
 let g:tex_flavor = 'latex'
+let g:vimtex_quickfix_enabled = 0
 
 " tex-conceal.vim settings
 set conceallevel=2
@@ -825,6 +826,8 @@ if has("patch-8.1.1564")
 else
   set signcolumn=yes
 endif
+" disable coc in git commits
+autocmd BufRead,BufNewFile COMMIT_EDITMSG let b:coc_enabled=0
 " inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 inoremap <silent><expr> <cr> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm() : "\<C-g>u\<CR>"
@@ -875,6 +878,7 @@ endfunction
 
 " markdown-preview-nvim
 " let vim_markdown_preview_github=1
+let g:mkdp_echo_preview_url = 1
 let g:mkdp_preview_options = {
     \ 'mkit': {},
     \ }
@@ -895,8 +899,8 @@ let g:projectionist_heuristics = {}
 let g:projectionist_heuristics["Config"] = {
     \ "src/com/amazon/adg/submission/service/pipeline/tasks/*.java": {"alternate": "tst/com/amazon/adg/submission/service/pipeline/task/{}Test.java"},
     \ "tst/com/amazon/adg/submission/service/pipeline/task/*Test.java": {"alternate": "src/com/amazon/adg/submission/service/pipeline/tasks/{}.java"},
-    \ "src/com/*.java": {"alternate": "tst/com/{}Test.java"},
-    \ "tst/com/*Test.java": {"alternate": "src/com/{}.java"},
+    \ "src/*.java": {"alternate": "tst/{}Test.java"},
+    \ "tst/*Test.java": {"alternate": "src/{}.java"},
     \ "lib/*.ts": {"alternate": "tst/{}.test.ts"},
     \ "tst/*.test.ts": {"alternate": "lib/{}.ts"},
 \ }
@@ -1071,6 +1075,29 @@ endif
 if filereadable("/apollo/env/envImprovement/vim/plugin/LinkToCodeBrowser.vim")
     source /apollo/env/envImprovement/vim/plugin/LinkToCodeBrowser.vim
 endif
+
+" ============================================================================
+" File:        LinkToCodeBrowser.vim
+" Maintainer:  Derek Bolt <derebolt@amazon.com>
+" ============================================================================
+
+function! LinkToCodeBrowser() range
+    let b:packageRoot = ChompedSystem('git rev-parse --show-toplevel')
+    let b:packageName = substitute(b:packageRoot, '.*/', '', '')
+    let b:filePathRelativeToPackageRoot = substitute(expand('%:p'), b:packageRoot, '', '')
+    let b:startLine = getpos("'<")[1]
+    let b:endLine = getpos("'>")[1]
+
+    let b:url = "https://code.amazon.com/packages/".b:packageName."/blobs/mainline/--/".b:filePathRelativeToPackageRoot."?hl_lines=".b:startLine."-".b:endLine."#line-".b:startLine
+    let @* = b:url
+    echo b:url
+endfunction
+
+function! ChompedSystem( ... )
+    return substitute(call('system', a:000), '\n\+$', '', '')
+endfunction
+
+command -range LinkToCodeBrowser :call LinkToCodeBrowser()
 
 "       ------------end of Amazon-specific vim settings-------------
 
