@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # ------------------- necessary installations ------------------------
 
 # Antigen: https://github.com/zsh-users/antigen
@@ -56,7 +63,7 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%H:%M \uf073 %m/%d/%y}"
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='black'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir rbenv)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs time)
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_DIR_SHOW_WRITABLE=true
@@ -213,10 +220,12 @@ bindkey -M emacs '^N' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
+
 # Geneate RDE autocompletion.
 fpath=(~/.zsh/completion $fpath)
 # autoload -Uz compinit && compinit -i
 
+## aws autocompletion
 
 # Lazy loading nvm
 declare -a NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
@@ -238,11 +247,15 @@ done
 # [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 autoload -Uz compinit
+autoload bashcompinit && bashcompinit
 for dump in ~/.zcompdump(N.mh+24); do
   compinit
 done
 compinit -C
-
+complete -C '/usr/local/bin/aws_completer' aws
 
 
 export PATH="/Users/yanxiche/Fortify/bin:$PATH"
+
+# Agent SDK CLI
+export PATH="$PATH:/Users/yanxiche/.ask/MagentaSDK-CLI-1.0/bin"
